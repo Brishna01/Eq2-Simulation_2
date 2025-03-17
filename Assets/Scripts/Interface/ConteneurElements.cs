@@ -5,12 +5,14 @@ using UnityEngine.UI;
 
 public class ConteneurElements : MonoBehaviour
 {
-    [SerializeField]
     private BoutonElement boutonSelectionne;
+    private SystemePlacement systemePlacement;
 
     // Start is called before the first frame update
     void Start()
     {
+        systemePlacement = GameObject.Find("SystemePlacement").GetComponent<SystemePlacement>();
+
         foreach (BoutonElement boutonElement in GetComponentsInChildren<BoutonElement>())
         {
             boutonElement.GetComponent<Button>().onClick.AddListener(() => OnBoutonClick(boutonElement));
@@ -31,8 +33,7 @@ public class ConteneurElements : MonoBehaviour
         } 
         else
         {
-            boutonElement.OnDeselectionner();
-            boutonSelectionne = null;
+            DeselectionnerBoutonElement();
         }
     }
 
@@ -40,10 +41,22 @@ public class ConteneurElements : MonoBehaviour
     {
         if (boutonSelectionne)
         {
-            boutonSelectionne.OnDeselectionner();
+            DeselectionnerBoutonElement();
         }
 
         boutonSelectionne = boutonElement;
         boutonSelectionne.OnSelectionner();
+        systemePlacement.CommencerPlacement(boutonSelectionne.elementCircuit);
+    }
+
+    private void DeselectionnerBoutonElement()
+    {
+        if (boutonSelectionne != null)
+        {
+            boutonSelectionne.OnDeselectionner();
+            boutonSelectionne = null;
+        }
+
+        systemePlacement.ArreterPlacement();
     }
 }

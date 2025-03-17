@@ -3,11 +3,6 @@ using UnityEngine;
 
 public class ControlleurCamera : MonoBehaviour
 {
-    private new Camera camera;
-
-    [SerializeField]
-    private RectTransform rectangleLimites;
-
     [SerializeField]
     private float tailleMinimale;
     [SerializeField]
@@ -18,17 +13,32 @@ public class ControlleurCamera : MonoBehaviour
     private Vector3 positionSourisPrecedente;
     private bool boutonDroitEnfonce = false;
 
+    [SerializeField]
+    private RectTransform rectangleLimites;
+
+    private new Camera camera;
+
     // Start is called before the first frame update
     void Start()
     {
-        camera = GetComponent<Camera>();
         positionSourisPrecedente = Input.mousePosition;
+
+        camera = GetComponent<Camera>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (peutDeplacer)
+        GererDeplacement();
+        ContraindreCamera();
+
+        camera.orthographicSize = Math.Clamp(camera.orthographicSize - 0.5f * Input.mouseScrollDelta.y, tailleMinimale,
+            tailleMaximale);
+    }
+
+    private void GererDeplacement()
+    {
+        if (peutDeplacer) 
         {
             if (Input.GetMouseButtonDown(1))
             {
@@ -42,13 +52,18 @@ public class ControlleurCamera : MonoBehaviour
             {
                 Vector3 deltaPositionSouris = Input.mousePosition - positionSourisPrecedente;
                 camera.transform.Translate(
-                        -deltaPositionSouris.x / camera.pixelHeight * camera.orthographicSize * 2,
-                        -deltaPositionSouris.y / camera.pixelHeight * camera.orthographicSize * 2,
-                        0
+                    -deltaPositionSouris.x / camera.pixelHeight * camera.orthographicSize * 2,
+                    -deltaPositionSouris.y / camera.pixelHeight * camera.orthographicSize * 2,
+                    0
                 );
             }
         }
+        
+        positionSourisPrecedente = Input.mousePosition;
+    }
 
+    private void ContraindreCamera()
+    {
         if (rectangleLimites != null)
         {
             float tailleCameraX = camera.pixelWidth / camera.pixelHeight * camera.orthographicSize * 2;
@@ -62,13 +77,17 @@ public class ControlleurCamera : MonoBehaviour
 
             camera.transform.position = new Vector3(nouveauX, nouveauY, camera.transform.position.z);
         }
-
-        camera.orthographicSize = Math.Clamp(camera.orthographicSize - 0.5f * Input.mouseScrollDelta.y, tailleMinimale,
-            tailleMaximale);
-
-        positionSourisPrecedente = Input.mousePosition;
     }
 
+    /// <summary>
+    /// Retourne les nouvelles limites d'une composante de la position de la 
+    /// caméra de sorte qu'aucune position hors-limites ne soit visible sur 
+    /// l'écran.
+    /// </summary>
+    /// <param name="min">le minimum de la composante</param>
+    /// <param name="max">le maximum de la composante</param>
+    /// <param name="dimensionCamera"></param>
+    /// <returns>les nouveaux minimum et maximum</returns>
     private (float, float) CalculerLimitesCamera(float min, float max, float dimensionCamera)
     {
         float nouveauMin = min + dimensionCamera < max - dimensionCamera

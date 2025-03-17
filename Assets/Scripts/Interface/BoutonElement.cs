@@ -1,6 +1,6 @@
-    using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -8,55 +8,73 @@ using UnityEngine.UI;
 public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private Button bouton;
-    private Image image;
+    private Image imageBouton;
+    private Image imageElement;
+    private TextMeshProUGUI texteElement;
     private RectTransform rectangle;
     private Rect tailleInitiale;
     private Color couleurInitiale;
-     
-
-
     [SerializeField]
     private Color couleurSelectionne;
 
     [SerializeField]
-    private GameObject tour;
+    public GameObject elementCircuit;
 
     [SerializeField]
-    private Button bouton1;
-
+    private GameObject tour;
 
     // Start is called before the first frame update
     void Start()
     {
         bouton = GetComponent<Button>();
-        image = GetComponent<Image>();
+        imageBouton = GetComponent<Image>();
+        imageElement = transform.Find("Image").GetComponent<Image>();
+        texteElement = transform.Find("MeshTexte").GetComponent<TextMeshProUGUI>();
         rectangle = GetComponent<RectTransform>();
         tailleInitiale = new Rect(rectangle.rect);
-        couleurInitiale = image.color;
+        couleurInitiale = imageBouton.color;
 
-        bouton1 = GameObject.Find("Bouton 1").GetComponent<Button>();
         tour = GameObject.Find("Tower Mage");
-        bouton1.onClick.AddListener(AjouterObjet);
+
+        AfficherElement();
+    }
+
+    private void AfficherElement()
+    {
+        if (elementCircuit != null)
+        {
+            SpriteRenderer afficheurSprite = elementCircuit.GetComponent<SpriteRenderer>();
+            if (afficheurSprite != null)
+            {
+                imageElement.color = afficheurSprite.color;
+                texteElement.enabled = false;
+            }
+            else
+            {
+                texteElement.text = elementCircuit.name;
+                imageElement.enabled = false;
+            }
+        }
     }
 
     void AjouterObjet()
     {
         if (tour != null)
         {
-            // Instancier l'objet dans la scène à la position (0, 0, 0)
+            // Instancier l'objet dans la scï¿½ne ï¿½ la position (0, 0, 0)
             Instantiate(tour, Vector3.zero, Quaternion.identity);
-            Debug.Log(tour.name + " ajouté à la scène");
+            Debug.Log(tour.name + " ajoutï¿½ ï¿½ la scï¿½ne");
         }
         else
         {
-            Debug.LogError("Le prefab n'est pas assigné !");
+            Debug.LogError("Le prefab n'est pas assignï¿½ !");
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void OnPointerEnter(PointerEventData data)
@@ -73,13 +91,11 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnSelectionner()
     {
-        image.color = couleurSelectionne;
-        Debug.Log(gameObject.name + " sélectionné");
+        imageBouton.color = couleurSelectionne;
     }
 
     public void OnDeselectionner()
     {
-        image.color = couleurInitiale;
-        Debug.Log(gameObject.name + " déselectionné");
+        imageBouton.color = couleurInitiale;
     }
 }
