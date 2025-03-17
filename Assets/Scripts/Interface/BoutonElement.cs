@@ -1,6 +1,4 @@
-    using System;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -12,8 +10,7 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private RectTransform rectangle;
     private Rect tailleInitiale;
     private Color couleurInitiale;
-     
-
+    private System.Random rand;
 
     [SerializeField]
     private Color couleurSelectionne;
@@ -21,42 +18,35 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField]
     private GameObject tour;
 
-    [SerializeField]
-    private Button bouton1;
-
-
     // Start is called before the first frame update
     void Start()
     {
-        bouton = GetComponent<Button>();
+        rand = new System.Random(); // Initialize random number generator
         image = GetComponent<Image>();
         rectangle = GetComponent<RectTransform>();
         tailleInitiale = new Rect(rectangle.rect);
         couleurInitiale = image.color;
-
-        bouton1 = GameObject.Find("Bouton 1").GetComponent<Button>();
+        bouton = GameObject.Find("Bouton 1").GetComponent<Button>();
         tour = GameObject.Find("Tower Mage");
-        bouton1.onClick.AddListener(AjouterObjet);
+
+        bouton.onClick.AddListener(AjouterObjet);
     }
 
     void AjouterObjet()
     {
         if (tour != null)
         {
-            // Instancier l'objet dans la scène à la position (0, 0, 0)
-            Instantiate(tour, Vector3.zero, Quaternion.identity);
-            Debug.Log(tour.name + " ajouté à la scène");
+            int x = rand.Next(-5, 5);
+            int y = rand.Next(-5, 5);
+            int z = rand.Next(-5, 5);
+
+            Instantiate(tour, new Vector3(x, y, z), Quaternion.identity);
+            Debug.Log("Nouveau tour ajouté à la place " + x+"," + y + "," + z);
         }
         else
         {
             Debug.LogError("Le prefab n'est pas assigné !");
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void OnPointerEnter(PointerEventData data)
