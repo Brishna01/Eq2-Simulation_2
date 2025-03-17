@@ -9,11 +9,12 @@ public class TestGrid : MonoBehaviour
     // Start is called before the first frame update
    
     private int colonnes = 5;
+    private int lignes = 4;
     private GridParalelle grid;
 
     private void Start()
     {
-         grid = new GridParalelle(colonnes, 4, 3f);
+         grid = new GridParalelle(colonnes, lignes, 4f, 1.75f);
     }
 
     private void Update()
