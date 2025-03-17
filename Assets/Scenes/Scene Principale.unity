@@ -413,6 +413,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   couleurSelectionne: {r: 0.47058824, g: 0.8627451, b: 1, a: 1}
+  tour: {fileID: 0}
 --- !u!114 &82767137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -640,6 +641,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   couleurSelectionne: {r: 0.47058824, g: 0.8627451, b: 1, a: 1}
+  tour: {fileID: 0}
 --- !u!114 &147042286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1001,6 +1003,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   couleurSelectionne: {r: 0.47058824, g: 0.8627451, b: 1, a: 1}
+  tour: {fileID: 0}
 --- !u!114 &489825221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1153,6 +1156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   couleurSelectionne: {r: 0.47058824, g: 0.8627451, b: 1, a: 1}
+  tour: {fileID: 0}
 --- !u!114 &608021494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1437,14 +1441,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.3820755, b: 0.3820755, a: 1}
+  m_Color: {r: 0.9716981, g: 0.9487807, b: 0.9487807, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 3509b9eb0db3a4a479b471828559d671, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1804,7 +1808,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6,
+    type: 3}
   m_Color: {r: 1, g: 0.8627451, b: 0.39215687, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -2419,6 +2424,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   couleurSelectionne: {r: 0.47058824, g: 0.8627451, b: 1, a: 1}
+  tour: {fileID: 0}
 --- !u!114 &1855371280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2705,6 +2711,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   couleurSelectionne: {r: 0.47058824, g: 0.8627451, b: 1, a: 1}
+  tour: {fileID: 0}
 --- !u!114 &1952086463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2932,6 +2939,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   couleurSelectionne: {r: 0.47058824, g: 0.8627451, b: 1, a: 1}
+  tour: {fileID: 0}
 --- !u!114 &2038962082
 MonoBehaviour:
   m_ObjectHideFlags: 0
