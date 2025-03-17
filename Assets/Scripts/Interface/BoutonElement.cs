@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -14,6 +15,8 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private RectTransform rectangle;
     private Rect tailleInitiale;
     private Color couleurInitiale;
+    private System.Random rand;
+
     [SerializeField]
     private Color couleurSelectionne;
 
@@ -61,9 +64,12 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (tour != null)
         {
-            // Instancier l'objet dans la sc�ne � la position (0, 0, 0)
-            Instantiate(tour, Vector3.zero, Quaternion.identity);
-            Debug.Log(tour.name + " ajout� � la sc�ne");
+            int x = rand.Next(-5, 5);
+            int y = rand.Next(-5, 5);
+            int z = rand.Next(-5, 5);
+
+            Instantiate(tour, new Vector3(x, y, z), Quaternion.identity);
+            Debug.Log("Nouveau tour ajout� � la place " + x+"," + y + "," + z);
         }
         else
         {
