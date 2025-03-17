@@ -15,16 +15,15 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private RectTransform rectangle;
     private Rect tailleInitiale;
     private Color couleurInitiale;
-    private System.Random rand;
 
     [SerializeField]
     private Color couleurSelectionne;
-
     [SerializeField]
     public GameObject elementCircuit;
 
     [SerializeField]
     private GameObject tour;
+    private System.Random rand;
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +36,7 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         tailleInitiale = new Rect(rectangle.rect);
         couleurInitiale = imageBouton.color;
 
-        tour = GameObject.Find("Tower Mage");
+        rand = new System.Random();
 
         AfficherElement();
     }
@@ -98,6 +97,7 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnSelectionner()
     {
         imageBouton.color = couleurSelectionne;
+        AjouterObjet();
     }
 
     public void OnDeselectionner()
