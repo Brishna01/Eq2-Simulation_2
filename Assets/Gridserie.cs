@@ -5,7 +5,7 @@ using CodeMonkey.Utils;
 using UnityEngine.Diagnostics;
 
 public class Gridserie 
-{
+{/*
     private int width;
     private int height;
     //private bool[,] gridSerie;
@@ -18,8 +18,8 @@ public class Gridserie
         this.height = height;
         this.cellSize = cellSize;
 
-        gridSerie = new int[1, 4];
-        int numero = 0;
+        //gridSerie = new int[1, 4];
+        int numero = colonne*4 -4;
 
         for (int i = 0; i < gridSerie.GetLength(0); i++)
         {
@@ -28,15 +28,15 @@ public class Gridserie
                 numero++;
                 gridSerie[i, j] = numero ;
                  Debug.Log(i + " , " + j);
-                UtilsClass.CreateWorldText(gridSerie[i, j].ToString(), null, GetWorldPosition(i+colonne, j), 20, Color.white, TextAnchor.MiddleCenter);
+                UtilsClass.CreateWorldText(gridSerie[i, j].ToString(), null, GetWorldPosition(i, j, colonne), 20, Color.white, TextAnchor.MiddleCenter);
 
             }
         }
         Debug.Log(width + " " + height);
     }
-    private Vector3 GetWorldPosition(int i, int j)
+    private Vector3 GetWorldPosition(int i, int j, int colonne)
     {
-        return new Vector3(i, j) * cellSize;
-    }
+        return new Vector3(i*colonne, j) * cellSize;
+    }*/
 
 }
