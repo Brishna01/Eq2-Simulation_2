@@ -11,6 +11,8 @@ public class TestGrid : MonoBehaviour
     private int colonnes = 5;
     private int lignes = 4;
     private GridParalelle grid;
+    public GridParalelle gridInput;
+    public int chiffre= 6;
 
     private void Start()
     {
@@ -19,10 +21,11 @@ public class TestGrid : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButton(0))
-        {
-            grid.SetValue(UtilsClass.GetMouseWorldPosition(), 56);
-        }
+         if (Input.GetMouseButtonDown(0))
+         {
+             grid.SetValue(UtilsClass.GetMouseWorldPosition(), 56);
+         }
+
     }
 
     // Debug.Log(width + " "+ height);
