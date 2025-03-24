@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -33,8 +34,8 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public TextMeshProUGUI courantText;   // UI pour afficher le courant
     public TextMeshProUGUI puissanceText; // UI pour afficher la puissance
 
-    public float courant;   // Valeur pour le courant
-    public float puissance; // Valeur pour la puissance
+    public double courant;   // Valeur pour le courant
+    public double puissance; // Valeur pour la puissance
 
     // Start is called before the first frame update
     void Start()
@@ -54,6 +55,9 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         rand = new System.Random();
 
         AfficherElement();
+
+        courantText = GameObject.Find("TextCourant").GetComponent<TextMeshProUGUI>();
+        puissanceText = GameObject.Find("TextPuissance").GetComponent<TextMeshProUGUI>();
     }
 
     private void AfficherElement()
@@ -126,8 +130,8 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             towerActuelle = Instantiate(tour); // Crée une copie de "Tower Mage"
             enPlacement = true;
 
-            courant = 10.0f;
-            puissance = 50.0f;
+            courant = 10.0;
+            puissance = 50.0;
 
         }
         else
