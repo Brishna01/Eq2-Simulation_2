@@ -22,7 +22,10 @@ public class ConteneurElements : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Escape)) 
+        {
+            DeselectionnerBoutonElement();
+        }
     }
 
     private void OnBoutonClick(BoutonElement boutonElement)

@@ -13,16 +13,23 @@ public class SystemePlacement : MonoBehaviour
     [SerializeField]
     private Grid grille;
     [SerializeField]
+    private GameObject grilleVisuelle;
+    [SerializeField]
     private GameObject conteneur;
 
     private new Camera camera;
-    private new EventSystem systemeEvenements;
+    private EventSystem systemeEvenements;
 
     // Start is called before the first frame update
     void Start()
     {
         camera = GameObject.Find("Main Camera").GetComponent<Camera>();
         systemeEvenements = GameObject.Find("EventSystem").GetComponent<EventSystem>();
+
+        if (grilleVisuelle != null)
+        {
+            grilleVisuelle.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -30,15 +37,7 @@ public class SystemePlacement : MonoBehaviour
     {
         if (objetAPlacer != null)
         {
-            Vector3 positionEcran = Input.mousePosition + new Vector3(decalageCurseur.x, decalageCurseur.y, 0);
-            Vector3 positionMonde = camera.ScreenToWorldPoint(positionEcran);
-
-            if (grille != null)
-            {
-                positionMonde = grille.WorldToCell(positionMonde) + new Vector3(0.5f, 0.5f, 0);
-            }
-
-            objetAPlacer.transform.position = new Vector3(positionMonde.x, positionMonde.y, 0);
+            objetAPlacer.transform.position = CalculerPositionCibleMonde();
         }
 
         if (Input.GetMouseButtonDown(0) && !systemeEvenements.IsPointerOverGameObject())
@@ -82,12 +81,18 @@ public class SystemePlacement : MonoBehaviour
 
         objetAPlacer = Instantiate(objetModele, transform);
         objetAPlacer.name = objetModele.name;
+        objetAPlacer.transform.position = CalculerPositionCibleMonde();
 
         SpriteRenderer afficheurSprite = objetAPlacer.GetComponent<SpriteRenderer>();
         if (afficheurSprite != null)
         {
             Color couleur = afficheurSprite.color;
             afficheurSprite.color = new Color(couleur.r, couleur.g, couleur.b, 0.8f);
+        }
+
+        if (grilleVisuelle != null)
+        {
+            grilleVisuelle.SetActive(true);
         }
     }
 
@@ -99,6 +104,24 @@ public class SystemePlacement : MonoBehaviour
             objetAPlacer = null;
         }
 
+        if (grilleVisuelle != null)
+        {
+            grilleVisuelle.SetActive(false);
+        } 
+
         objetModele = null;
+    }
+
+    private Vector3 CalculerPositionCibleMonde()
+    {
+        Vector3 positionEcran = Input.mousePosition + new Vector3(decalageCurseur.x, decalageCurseur.y, 0);
+        Vector3 positionMonde = camera.ScreenToWorldPoint(positionEcran);
+
+        if (grille != null)
+        {
+            positionMonde = grille.WorldToCell(positionMonde) + new Vector3(0.5f, 0.5f, 0);
+        }
+
+        return new Vector3(positionMonde.x, positionMonde.y, 0);
     }
 }
