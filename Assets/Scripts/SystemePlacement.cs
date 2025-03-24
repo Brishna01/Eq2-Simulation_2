@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,16 +7,22 @@ using UnityEngine.EventSystems;
 public class SystemePlacement : MonoBehaviour
 {
     [SerializeField]
-    private Vector2 decalageCurseur;
-    private GameObject objetModele;
-    private GameObject objetAPlacer;
-
-    [SerializeField]
     private Grid grille;
     [SerializeField]
-    private GameObject grilleVisuelle;
+    private GameObject grillage;
+    [SerializeField]
+    private bool grillagePersistant;
+
     [SerializeField]
     private GameObject conteneur;
+
+    [SerializeField]
+    private Vector2 decalageCurseur;
+
+    private GameObject objetAPlacer;
+    private bool modeDragEtDrop;
+
+    public Action<GameObject, bool> onObjectPlace;
 
     private new Camera camera;
     private EventSystem systemeEvenements;
@@ -26,9 +33,9 @@ public class SystemePlacement : MonoBehaviour
         camera = GameObject.Find("Main Camera").GetComponent<Camera>();
         systemeEvenements = GameObject.Find("EventSystem").GetComponent<EventSystem>();
 
-        if (grilleVisuelle != null)
+        if (grillage != null)
         {
-            grilleVisuelle.SetActive(false);
+            grillage.SetActive(grillagePersistant);
         }
     }
 
@@ -40,7 +47,8 @@ public class SystemePlacement : MonoBehaviour
             objetAPlacer.transform.position = CalculerPositionCibleMonde();
         }
 
-        if (Input.GetMouseButtonDown(0) && !systemeEvenements.IsPointerOverGameObject())
+        if (modeDragEtDrop && Input.GetMouseButtonUp(0)
+            || !modeDragEtDrop && Input.GetMouseButtonDown(0) && !systemeEvenements.IsPointerOverGameObject())
         {
             PlacerObject();
         }
@@ -48,7 +56,7 @@ public class SystemePlacement : MonoBehaviour
 
     private void PlacerObject()
     {
-        if (objetAPlacer == null) 
+        if (objetAPlacer == null)
         {
             return;
         }
@@ -65,22 +73,37 @@ public class SystemePlacement : MonoBehaviour
             objetAPlacer.transform.parent = conteneur.transform;
         }
 
+        GameObject objetPlace = objetAPlacer;
         objetAPlacer = null;
-        CommencerPlacement(objetModele);
+
+        onObjectPlace(objetPlace, modeDragEtDrop);
     }
 
-    public void CommencerPlacement(GameObject _objetModele)
+    public void CommencerPlacement(GameObject objet, bool cloner)
     {
-        objetModele = _objetModele;
+        CommencerPlacement(objet, cloner, false);
+    }
 
-        if (objetModele == null)
+    public void CommencerPlacement(GameObject objet, bool cloner, bool _modeDragEtDrop)
+    {
+        if (objet == null)
         {
             objetAPlacer = null;
             return;
         }
 
-        objetAPlacer = Instantiate(objetModele, transform);
-        objetAPlacer.name = objetModele.name;
+        modeDragEtDrop = _modeDragEtDrop;
+
+        if (cloner)
+        {
+            objetAPlacer = Instantiate(objet, transform);
+            objetAPlacer.name = objet.name;
+        }
+        else
+        {
+            objetAPlacer = objet;
+        }
+
         objetAPlacer.transform.position = CalculerPositionCibleMonde();
 
         SpriteRenderer afficheurSprite = objetAPlacer.GetComponent<SpriteRenderer>();
@@ -90,26 +113,32 @@ public class SystemePlacement : MonoBehaviour
             afficheurSprite.color = new Color(couleur.r, couleur.g, couleur.b, 0.8f);
         }
 
-        if (grilleVisuelle != null)
+        if (grillage != null)
         {
-            grilleVisuelle.SetActive(true);
+            grillage.SetActive(true);
         }
     }
 
     public void ArreterPlacement()
     {
-        if (objetAPlacer != null)
+        if (objetAPlacer != null && objetAPlacer.transform.parent == transform)
         {
             Destroy(objetAPlacer);
             objetAPlacer = null;
         }
 
-        if (grilleVisuelle != null)
+        if (grillage != null && !grillagePersistant)
         {
-            grilleVisuelle.SetActive(false);
-        } 
+            grillage.SetActive(false);
+        }
+    }
 
-        objetModele = null;
+    public void ArreterPlacement(GameObject objet)
+    {
+        if (objetAPlacer != null && objet == objetAPlacer)
+        {
+            ArreterPlacement();
+        }
     }
 
     private Vector3 CalculerPositionCibleMonde()
