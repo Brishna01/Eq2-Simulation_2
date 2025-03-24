@@ -11,7 +11,7 @@ public class ConteneurElements : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        systemePlacement = GameObject.Find("SystemePlacement").GetComponent<SystemePlacement>();
+        //systemePlacement = GameObject.Find("SystemePlacement").GetComponent<SystemePlacement>();
 
         foreach (BoutonElement boutonElement in GetComponentsInChildren<BoutonElement>())
         {
@@ -22,7 +22,10 @@ public class ConteneurElements : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Escape)) 
+        {
+            DeselectionnerBoutonElement();
+        }
     }
 
     private void OnBoutonClick(BoutonElement boutonElement)
@@ -46,7 +49,7 @@ public class ConteneurElements : MonoBehaviour
 
         boutonSelectionne = boutonElement;
         boutonSelectionne.OnSelectionner();
-        systemePlacement.CommencerPlacement(boutonSelectionne.elementCircuit);
+        //systemePlacement.CommencerPlacement(boutonSelectionne.elementCircuit);
     }
 
     private void DeselectionnerBoutonElement()

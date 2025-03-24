@@ -24,17 +24,32 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField]
     private GameObject tour;
     private System.Random rand;
+    public LayerMask solMask; // Layer du sol pour que l'objet suive la scène
+
+    private GameObject towerActuelle;
+    private bool enPlacement = false;
+    public Camera cam;
+
+    public TextMeshProUGUI courantText;   // UI pour afficher le courant
+    public TextMeshProUGUI puissanceText; // UI pour afficher la puissance
+
+    public float courant;   // Valeur pour le courant
+    public float puissance; // Valeur pour la puissance
 
     // Start is called before the first frame update
     void Start()
     {
-        bouton = GetComponent<Button>();
+        bouton = GameObject.Find("Btn Tower").GetComponent<Button>();
+        bouton.onClick.AddListener(GenererTower);
+
+
         imageBouton = GetComponent<Image>();
         imageElement = transform.Find("Image").GetComponent<Image>();
-        texteElement = transform.Find("MeshTexte").GetComponent<TextMeshProUGUI>();
+        //texteElement = transform.Find("MeshTexte").GetComponent<TextMeshProUGUI>();
         rectangle = GetComponent<RectTransform>();
         tailleInitiale = new Rect(rectangle.rect);
         couleurInitiale = imageBouton.color;
+        tour = GameObject.Find("Tower Mage");
 
         rand = new System.Random();
 
@@ -59,27 +74,27 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
     }
 
-    void AjouterObjet()
-    {
-        if (tour != null)
-        {
-            int x = rand.Next(-5, 5);
-            int y = rand.Next(-5, 5);
-            int z = rand.Next(-5, 5);
-
-            Instantiate(tour, new Vector3(x, y, z), Quaternion.identity);
-            Debug.Log("Nouveau tour ajoutï¿½ ï¿½ la place " + x+"," + y + "," + z);
-        }
-        else
-        {
-            Debug.LogError("Le prefab n'est pas assignï¿½ !");
-        }
-    }
 
     // Update is called once per frame
     void Update()
     {
+        if (enPlacement && towerActuelle != null)
+        {
+            Vector3 sourisPosition = Input.mousePosition;
+            sourisPosition = cam.ScreenToWorldPoint(sourisPosition);
+            sourisPosition.z = 0;
 
+            RaycastHit hit;
+            if (Physics.Raycast(sourisPosition, Vector3.forward, out hit, Mathf.Infinity, solMask))
+            {
+                towerActuelle.transform.position = hit.point;
+            }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                enPlacement = false; // Finalise le placement de la tour
+            }
+        }
     }
 
     public void OnPointerEnter(PointerEventData data)
@@ -97,11 +112,35 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnSelectionner()
     {
         imageBouton.color = couleurSelectionne;
-        AjouterObjet();
+
     }
 
     public void OnDeselectionner()
     {
         imageBouton.color = couleurInitiale;
     }
+    private void GenererTower()
+    {
+        if (tour != null)
+        {
+            towerActuelle = Instantiate(tour); // Crée une copie de "Tower Mage"
+            enPlacement = true;
+
+            courant = 10.0f;
+            puissance = 50.0f;
+
+        }
+        else
+        {
+            Debug.LogError("Tower Mage n'est pas assigné dans l'Inspector !");
+        }
+    }
+    private void UpdateUI()
+    {
+        // Mettre à jour l'affichage du courant et de la puissance
+        courantText.text = "Courant: " + courant.ToString("F1") + " A"; // Affiche le courant avec 1 chiffre après la virgule
+        puissanceText.text = "Puissance: " + puissance.ToString("F1") + " W"; // Affiche la puissance avec 1 chiffre après la virgule
+    }
+
+
 }
