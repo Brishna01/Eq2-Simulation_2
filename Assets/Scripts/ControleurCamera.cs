@@ -4,6 +4,12 @@ using UnityEngine;
 public class ControleurCamera : MonoBehaviour
 {
     [SerializeField]
+    private GameObject terrain;
+    private GridParalelle grilleCircuit;
+
+    [SerializeField]
+    private float tailleInitiale;
+    [SerializeField]
     private float tailleMinimale;
     [SerializeField]
     private float tailleMaximale;
@@ -13,17 +19,20 @@ public class ControleurCamera : MonoBehaviour
     private Vector3 positionSourisPrecedente;
     private bool boutonDroitEnfonce = false;
 
-    [SerializeField]
-    private RectTransform rectangleLimites;
-
     private new Camera camera;
 
     // Start is called before the first frame update
     void Start()
     {
+        if (terrain != null)
+        {
+            grilleCircuit = terrain.GetComponent<GridParalelle>();
+        }
+
         positionSourisPrecedente = Input.mousePosition;
 
         camera = GetComponent<Camera>();
+        camera.orthographicSize = tailleInitiale;
     }
 
     // Update is called once per frame
@@ -64,12 +73,12 @@ public class ControleurCamera : MonoBehaviour
 
     private void ContraindreCamera()
     {
-        if (rectangleLimites != null)
+        if (grilleCircuit != null)
         {
             float tailleCameraX = camera.pixelWidth / camera.pixelHeight * camera.orthographicSize * 2;
-            (float, float) limitesX = CalculerLimitesCamera(rectangleLimites.rect.xMin, rectangleLimites.rect.xMax,
+            (float, float) limitesX = CalculerLimitesCamera(-grilleCircuit.colonnes/2 - 2, grilleCircuit.colonnes/2 + 2,
                     tailleCameraX);
-            (float, float) limitesY = CalculerLimitesCamera(rectangleLimites.rect.yMin, rectangleLimites.rect.yMax,
+            (float, float) limitesY = CalculerLimitesCamera(-grilleCircuit.lignes/2 - 2, grilleCircuit.lignes/2 + 2,
                     camera.orthographicSize);
 
             float nouveauX = Math.Clamp(camera.transform.position.x, limitesX.Item1, limitesX.Item2);
