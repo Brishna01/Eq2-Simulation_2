@@ -1,3 +1,4 @@
+using CodeMonkey.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,22 +15,32 @@ public class SystemePlacement : MonoBehaviour
     private bool grillagePersistant;
 
     [SerializeField]
-    private GameObject conteneur;
+    private GameObject conteneur;  //mmmmmmmmmmmmm
 
     [SerializeField]
     private Vector2 decalageCurseur;
 
     private GameObject objetAPlacer;
-    private bool modeDragEtDrop;
+    private bool modeDragEtDrop;           //ppppppppppppppppppppppppppppppppppppp
 
-    public Action<GameObject, bool> onObjectPlace;
+    public Action<GameObject, bool> onObjectPlace;               //ooooooooooooooooooooooooooooooooooooooooooooooooooooo
 
     private new Camera camera;
     private EventSystem systemeEvenements;
 
-    // Start is called before the first frame update
+
+    private int colonnes = 5;
+    private int lignes = 4;
+    private GridParalelle grid;
+    public int chiffre = 6;
+
+
+
     void Start()
     {
+      //  grid = new GridParalelle(colonnes, lignes, 1f, 1f);
+
+
         camera = GameObject.Find("Main Camera").GetComponent<Camera>();
         systemeEvenements = GameObject.Find("EventSystem").GetComponent<EventSystem>();
 
@@ -39,9 +50,10 @@ public class SystemePlacement : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+  
     void Update()
-    {
+    { 
+
         if (objetAPlacer != null)
         {
             objetAPlacer.transform.position = CalculerPositionCibleMonde();
@@ -51,7 +63,9 @@ public class SystemePlacement : MonoBehaviour
             || !modeDragEtDrop && Input.GetMouseButtonDown(0) && !systemeEvenements.IsPointerOverGameObject())
         {
             PlacerObject();
+            //grid.SetValue(UtilsClass.GetMouseWorldPosition(), 56, objetAPlacer);
         }
+        
     }
 
     private void PlacerObject()
@@ -73,8 +87,9 @@ public class SystemePlacement : MonoBehaviour
             objetAPlacer.transform.parent = conteneur.transform;
         }
 
-        GameObject objetPlace = objetAPlacer;
-        objetAPlacer = null;
+         GameObject objetPlace = objetAPlacer;
+         objetAPlacer = null;
+
 
         onObjectPlace(objetPlace, modeDragEtDrop);
     }

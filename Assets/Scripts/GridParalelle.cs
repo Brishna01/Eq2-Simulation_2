@@ -5,88 +5,103 @@ using CodeMonkey.Utils;
 using UnityEngine.Diagnostics;
 
 public class  GridParalelle {
-    private int width;
-    private int height;
-    //private Gridserie[,] gridArray;
+    private int colonnes;
+    private int lignes;
+
+    private float origineGrilleX;
+    private float origineGrilleY;
+
     private int[,] gridArray;
+    private GameObject[,] gridArrayObjet;
+
     private float cellSizeX;
     private float cellSizeY;
     private TextMesh[,] debugTextArray;
 
 
-    public GridParalelle(int width, int height, float cellSizeX, float cellSizeY)
+    public GridParalelle(int colonnes, int lignes, float cellSizeX, float cellSizeY)
     {
-        this.width = width;
-        this.height = height;
+        this.colonnes = colonnes;
+        this.lignes = lignes;
         this.cellSizeX = cellSizeX;
         this.cellSizeY = cellSizeY;
 
+        origineGrilleX = (float)(0 -colonnes*cellSizeX* 0.5);
+        origineGrilleY = (float)(0 - lignes * cellSizeY * 0.5);
 
-        //gridArray = new Gridserie[width, height];
-        gridArray = new int[width, height];
-        debugTextArray = new TextMesh[width, height];
+       
+        gridArray = new int[colonnes, lignes];
+        gridArrayObjet = new GameObject[colonnes, lignes];
+
+        debugTextArray = new TextMesh[colonnes, lignes];
         
 
-        for (int laColonne = 0; laColonne < gridArray.GetLength(0); laColonne++)
+        for (int laColonne = 0; laColonne < gridArrayObjet.GetLength(0); laColonne++)
         {
-            for (int j = 0; j < gridArray.GetLength(1); j++)
+            for (int j = 0; j < gridArrayObjet.GetLength(1); j++)
             {
-                // gridArray[laColonne , j] = new Gridserie(1, lignes, 5f, laColonne +1);
-
-                debugTextArray[laColonne,j] = UtilsClass.CreateWorldText(gridArray[laColonne, j].ToString(), null, GetWorldPosition(laColonne, j), 10, Color.white, TextAnchor.MiddleCenter);
+              
+               debugTextArray[laColonne,j] = UtilsClass.CreateWorldText(gridArray[laColonne, j].ToString(), null, GetWorldPosition(laColonne, j) + new Vector3(cellSizeX, cellSizeY)*0.5f, 5, Color.white, TextAnchor.MiddleCenter);   
+                //a changer pour mettre objet
                
-                if(laColonne<gridArray.GetLength(0)-1 && j <gridArray.GetLength(1) -1) {
-                    Debug.DrawLine(GetWorldPosition(laColonne, j), GetWorldPosition(laColonne, j + 1), Color.white, 100f);
-                    Debug.DrawLine(GetWorldPosition(laColonne, j), GetWorldPosition(laColonne + 1, j), Color.white, 100f);
+                if(laColonne<gridArrayObjet.GetLength(0)-1 && j <gridArrayObjet.GetLength(1) -1) {
+                    Debug.DrawLine(GetWorldPositionMoitie(laColonne , j), GetWorldPositionMoitie(laColonne, j+1), Color.white, 100f);
+                    Debug.DrawLine(GetWorldPositionMoitie(laColonne, j), GetWorldPositionMoitie(laColonne + 1 , j), Color.white, 100f);
 
                 }
 
                  //Debug.Log(laColonne + " , " + j);
             }
         }
-        Debug.DrawLine(GetWorldPosition(0, height-1), GetWorldPosition(width-1, height-1), Color.white, 100f);
-        Debug.DrawLine(GetWorldPosition(width-1, 0), GetWorldPosition(width-1, height-1), Color.white, 100f);
+        Debug.DrawLine(GetWorldPositionMoitie(0, lignes-1), GetWorldPositionMoitie(colonnes-1, lignes-1), Color.white, 100f);
+        Debug.DrawLine(GetWorldPositionMoitie(colonnes-1, 0), GetWorldPositionMoitie(colonnes-1, lignes-1), Color.white, 100f);
         
 
         //Debug.Log(width + " " + height);
-       // SetValue(2, 1, 56);
     }
 
     private Vector3 GetWorldPosition(int i, int j) 
     {
-        return new Vector3(i * cellSizeX - 7.5f, j * cellSizeY - 2f);
+        //return new Vector3(i * cellSizeX - 7.5f, j * cellSizeY - 2f);
         //return new Vector3(i , j )*cellSizeY;
+        return new Vector3(i * cellSizeY + origineGrilleX, j * cellSizeY+origineGrilleY) ;
     }
-   
+
+    private Vector3 GetWorldPositionMoitie(int i, int j)
+    {
+        //return new Vector3(i * cellSizeX - 7.5f, j * cellSizeY - 2f);
+        //return new Vector3(i , j )*cellSizeY;
+        return new Vector3(i * cellSizeY +0.5f +origineGrilleX, j * cellSizeY + 0.5f + origineGrilleY) ;
+    }
+
     private void GetXY (Vector3 worldposition, out int x, out int y)
     {
-       x = Mathf.FloorToInt( (worldposition.x +7.5f ) / cellSizeX);
-       y = Mathf.FloorToInt( (worldposition.y +2f) / cellSizeY);
+       x = Mathf.FloorToInt( (worldposition.x  ) / cellSizeX);
+       y = Mathf.FloorToInt( (worldposition.y ) / cellSizeY);
        // x = Mathf.FloorToInt((worldposition.x -7.5f ) / cellSizeX);
         //y = Mathf.FloorToInt((worldposition.y -2f) / cellSizeY);
 
     }
-    public void SetValue(int x, int y, int value )
+    public void SetValue(int x, int y, int value , GameObject objet)
     {
-       if (x >= 0  && y >= 0 && x < width   && y < height )
+       if (x >= 0  && y >= 0 && x < colonnes   && y < lignes )
  //           if (x>= 0+7.5f && y>=0+2f && x< width +7.5f&& y < height + 2f)
         {
             gridArray[x , y] = value;
             debugTextArray[x, y].text = gridArray[x, y].ToString();
-           
+
+            gridArrayObjet[x, y] = objet;
+
         }
 
     }
-    public void SetValue(Vector3 worldPosition, int value)
+    public void SetValue(Vector3 worldPosition, int value, GameObject objet)
     {
         int x, y;
         GetXY(worldPosition, out x, out y);
-        SetValue(x, y, value);
-
+        SetValue(x, y, value, objet);
+     
     }
-
-
-
 
 
 
@@ -94,7 +109,7 @@ public class  GridParalelle {
 
     public int GetValue(int x, int y) {
 
-        if (x >= 0 && y >= 0 && x < width && y < height)
+        if (x >= 0 && y >= 0 && x < colonnes && y < lignes)
         {
             return gridArray[x, y];
         }
@@ -103,10 +118,15 @@ public class  GridParalelle {
             return 0;
         }
     }
+    
+
     public int GetValue(Vector3 worldPosition)
     {
         int x, y;
         GetXY(worldPosition, out x, out y);
         return GetValue(x, y);
     }
+    
+
+   
 }
