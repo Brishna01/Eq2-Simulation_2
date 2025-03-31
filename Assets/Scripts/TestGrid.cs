@@ -16,7 +16,7 @@ public class TestGrid : MonoBehaviour
 
     private void Start()
     {
-         grid = new GridParalelle(colonnes, lignes, 4f, 1.75f);
+         //grid = new GridParalelle(colonnes, lignes, 4f, 1.75f);
     }
 
     private void Update()

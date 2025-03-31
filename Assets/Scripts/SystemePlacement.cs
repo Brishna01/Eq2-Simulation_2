@@ -7,14 +7,15 @@ using UnityEngine.EventSystems;
 public class SystemePlacement : MonoBehaviour
 {
     [SerializeField]
+    private GameObject terrain;
     private Grid grille;
-    [SerializeField]
+    private GridParalelle grilleCircuit;
     private GameObject grillage;
     [SerializeField]
     private bool grillagePersistant;
 
     [SerializeField]
-    private GameObject conteneur;
+    private GameObject conteneurObjets;
 
     [SerializeField]
     private Vector2 decalageCurseur;
@@ -31,11 +32,16 @@ public class SystemePlacement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        grille = terrain.GetComponent<Grid>();
+        grilleCircuit = terrain.GetComponent<GridParalelle>();
+        grillage = terrain.transform.Find("Grillage").gameObject;
+
         camera = GameObject.Find("Main Camera").GetComponent<Camera>();
         systemeEvenements = GameObject.Find("EventSystem").GetComponent<EventSystem>();
 
         if (grillage != null)
         {
+            grillage.transform.localScale = new Vector3(grilleCircuit.colonnes, grilleCircuit.lignes, 0);
             grillage.SetActive(grillagePersistant);
         }
     }
@@ -79,9 +85,9 @@ public class SystemePlacement : MonoBehaviour
             afficheurSprite.color = new Color(couleur.r, couleur.g, couleur.b);
         }
 
-        if (conteneur != null)
+        if (conteneurObjets != null)
         {
-            objetAPlacer.transform.parent = conteneur.transform;
+            objetAPlacer.transform.parent = conteneurObjets.transform;
         }
 
         GameObject objetPlace = objetAPlacer;
