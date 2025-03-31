@@ -5,18 +5,44 @@ using UnityEngine.UI;
 
 public class ConteneurElements : MonoBehaviour
 {
+    [SerializeField]
+    private bool modeDragEtDrop;
+
     private BoutonElement boutonSelectionne;
     private SystemePlacement systemePlacement;
 
     // Start is called before the first frame update
     void Start()
     {
-        //systemePlacement = GameObject.Find("SystemePlacement").GetComponent<SystemePlacement>();
+        systemePlacement = GameObject.Find("SystemePlacement").GetComponent<SystemePlacement>();
 
         foreach (BoutonElement boutonElement in GetComponentsInChildren<BoutonElement>())
         {
-            boutonElement.GetComponent<Button>().onClick.AddListener(() => OnBoutonClick(boutonElement));
+            boutonElement.onPointerDown += OnBoutonDown;
         }
+
+        systemePlacement.onObjetPlace += (element, _modeDragEtDrop) =>
+        {
+            if (boutonSelectionne != null)
+            {
+                if (modeDragEtDrop)
+                {
+                    DeselectionnerBoutonElement();
+                }
+                else 
+                {
+                    systemePlacement.CommencerPlacement(boutonSelectionne.elementCircuit, true, modeDragEtDrop);
+                }
+            }
+        };
+
+        systemePlacement.onPlacementArrete += (element, _modeDragEtDrop) =>
+        {
+            if (boutonSelectionne != null)
+            {
+                DeselectionnerBoutonElement();
+            }
+        };
     }
 
     // Update is called once per frame
@@ -28,7 +54,7 @@ public class ConteneurElements : MonoBehaviour
         }
     }
 
-    private void OnBoutonClick(BoutonElement boutonElement)
+    private void OnBoutonDown(BoutonElement boutonElement)
     {
         if (boutonElement != boutonSelectionne) 
         {
@@ -49,7 +75,7 @@ public class ConteneurElements : MonoBehaviour
 
         boutonSelectionne = boutonElement;
         boutonSelectionne.OnSelectionner();
-        //systemePlacement.CommencerPlacement(boutonSelectionne.elementCircuit);
+        systemePlacement.CommencerPlacement(boutonSelectionne.elementCircuit, true, modeDragEtDrop);
     }
 
     private void DeselectionnerBoutonElement()
@@ -58,8 +84,8 @@ public class ConteneurElements : MonoBehaviour
         {
             boutonSelectionne.OnDeselectionner();
             boutonSelectionne = null;
-        }
 
-        systemePlacement.ArreterPlacement();
+            systemePlacement.ArreterPlacement();
+        }
     }
 }

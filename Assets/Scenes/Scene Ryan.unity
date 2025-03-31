@@ -340,7 +340,7 @@ GameObject:
   - component: {fileID: 174280729}
   - component: {fileID: 174280730}
   m_Layer: 0
-  m_Name: Grille Visuelle
+  m_Name: Grillage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -703,10 +703,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d09c629ced93dbe4bba7b9e941af41b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  decalageCurseur: {x: 0, y: 0}
   grille: {fileID: 281332247}
-  grilleVisuelle: {fileID: 174280728}
+  grillage: {fileID: 174280728}
+  grillagePersistant: 1
   conteneur: {fileID: 606408868}
+  decalageCurseur: {x: 0, y: 0}
 --- !u!1001 &756981552
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -831,6 +832,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52fca12c53d89df4b8ab8c6f3613f1a4, type: 3}
+--- !u!224 &880985695 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4108783147424803106, guid: 52fca12c53d89df4b8ab8c6f3613f1a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 40694562}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &966292615
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3417,12 +3424,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1473833560}
   m_PrefabAsset: {fileID: 0}
---- !u!224 &1180782949 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 4108783147424803106, guid: 52fca12c53d89df4b8ab8c6f3613f1a4,
-    type: 3}
-  m_PrefabInstance: {fileID: 40694562}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1280396881 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4108783147424803106, guid: 52fca12c53d89df4b8ab8c6f3613f1a4,
@@ -3462,7 +3463,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1280396881}
-  - {fileID: 1180782949}
+  - {fileID: 880985695}
   - {fileID: 1155991804}
   - {fileID: 2038567117}
   - {fileID: 1454872768}
@@ -3551,6 +3552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d81332f009915be4f8717dc15c138e20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modeDragEtDrop: 1
 --- !u!224 &1454872768 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4108783147424803106, guid: 52fca12c53d89df4b8ab8c6f3613f1a4,

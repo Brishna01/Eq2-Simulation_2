@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     private Button bouton;
     private Image imageBouton;
@@ -16,6 +17,7 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private RectTransform rectangle;
     private Rect tailleInitiale;
     private Color couleurInitiale;
+    public Action<BoutonElement> onPointerDown;
 
     [SerializeField]
     private Color couleurSelectionne;
@@ -25,7 +27,7 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField]
     private GameObject tour;
     private System.Random rand;
-    public LayerMask solMask; // Layer du sol pour que l'objet suive la scène
+    public LayerMask solMask; // Layer du sol pour que l'objet suive la scï¿½ne
 
     private GameObject towerActuelle;
     private bool enPlacement = false;
@@ -40,9 +42,10 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     // Start is called before the first frame update
     void Start()
     {
-        bouton = GameObject.Find("Btn Tower").GetComponent<Button>();
-        bouton.onClick.AddListener(GenererTower);
-
+        if (GameObject.Find("Btn Tower")) {
+            bouton = GameObject.Find("Btn Tower").GetComponent<Button>();
+            bouton.onClick.AddListener(GenererTower);
+        }
 
         imageBouton = GetComponent<Image>();
         imageElement = transform.Find("Image").GetComponent<Image>();
@@ -78,7 +81,6 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
     }
 
-
     // Update is called once per frame
     void Update()
     {
@@ -113,6 +115,11 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         rectangle.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, tailleInitiale.height);
     }
 
+    public void OnPointerDown(PointerEventData data)
+    {
+        onPointerDown(this);
+    }
+
     public void OnSelectionner()
     {
         imageBouton.color = couleurSelectionne;
@@ -127,7 +134,7 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (tour != null)
         {
-            towerActuelle = Instantiate(tour); // Crée une copie de "Tower Mage"
+            towerActuelle = Instantiate(tour); // Crï¿½e une copie de "Tower Mage"
             enPlacement = true;
 
             courant = 10.0;
@@ -136,14 +143,14 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
         else
         {
-            Debug.LogError("Tower Mage n'est pas assigné dans l'Inspector !");
+            Debug.LogError("Tower Mage n'est pas assignï¿½ dans l'Inspector !");
         }
     }
     private void UpdateUI()
     {
-        // Mettre à jour l'affichage du courant et de la puissance
-        courantText.text = "Courant: " + courant.ToString("F1") + " A"; // Affiche le courant avec 1 chiffre après la virgule
-        puissanceText.text = "Puissance: " + puissance.ToString("F1") + " W"; // Affiche la puissance avec 1 chiffre après la virgule
+        // Mettre ï¿½ jour l'affichage du courant et de la puissance
+        courantText.text = "Courant: " + courant.ToString("F1") + " A"; // Affiche le courant avec 1 chiffre aprï¿½s la virgule
+        puissanceText.text = "Puissance: " + puissance.ToString("F1") + " W"; // Affiche la puissance avec 1 chiffre aprï¿½s la virgule
     }
 
 
