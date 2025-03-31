@@ -27,11 +27,6 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField]
     private GameObject tour;
     private System.Random rand;
-    public LayerMask solMask; // Layer du sol pour que l'objet suive la sc�ne
-
-    private GameObject towerActuelle;
-    private bool enPlacement = false;
-    public Camera cam;
 
     public TextMeshProUGUI courantText;   // UI pour afficher le courant
     public TextMeshProUGUI puissanceText; // UI pour afficher la puissance
@@ -44,7 +39,9 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (GameObject.Find("Btn Tower")) {
             bouton = GameObject.Find("Btn Tower").GetComponent<Button>();
-            bouton.onClick.AddListener(GenererTower);
+            courant = 10.0;
+            puissance = 50.0;
+            bouton.onClick.AddListener(UpdateUI);
         }
 
         imageBouton = GetComponent<Image>();
@@ -84,23 +81,7 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     // Update is called once per frame
     void Update()
     {
-        if (enPlacement && towerActuelle != null)
-        {
-            Vector3 sourisPosition = Input.mousePosition;
-            sourisPosition = cam.ScreenToWorldPoint(sourisPosition);
-            sourisPosition.z = 0;
-
-            RaycastHit hit;
-            if (Physics.Raycast(sourisPosition, Vector3.forward, out hit, Mathf.Infinity, solMask))
-            {
-                towerActuelle.transform.position = hit.point;
-            }
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                enPlacement = false; // Finalise le placement de la tour
-            }
-        }
+        
     }
 
     public void OnPointerEnter(PointerEventData data)
@@ -130,27 +111,12 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         imageBouton.color = couleurInitiale;
     }
-    private void GenererTower()
-    {
-        if (tour != null)
-        {
-            towerActuelle = Instantiate(tour); // Cr�e une copie de "Tower Mage"
-            enPlacement = true;
-
-            courant = 10.0;
-            puissance = 50.0;
-
-        }
-        else
-        {
-            Debug.LogError("Tower Mage n'est pas assign� dans l'Inspector !");
-        }
-    }
+    
     private void UpdateUI()
     {
-        // Mettre � jour l'affichage du courant et de la puissance
-        courantText.text = "Courant: " + courant.ToString("F1") + " A"; // Affiche le courant avec 1 chiffre apr�s la virgule
-        puissanceText.text = "Puissance: " + puissance.ToString("F1") + " W"; // Affiche la puissance avec 1 chiffre apr�s la virgule
+        // Mettre à jour l'affichage du courant et de la puissance
+        courantText.text = "Courant: " + courant.ToString("F1") + " A"; // Affiche le courant avec 1 chiffre après la virgule
+        puissanceText.text = "Puissance: " + puissance.ToString("F1") + " W"; // Affiche la puissance avec 1 chiffre après la virgule
     }
 
 
