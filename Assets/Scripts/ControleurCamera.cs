@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class ControlleurCamera : MonoBehaviour
+public class ControleurCamera : MonoBehaviour
 {
     [SerializeField]
     private float tailleMinimale;

@@ -21,7 +21,7 @@ public class ConteneurElements : MonoBehaviour
             boutonElement.onPointerDown += OnBoutonDown;
         }
 
-        systemePlacement.onObjectPlace += (element, _modeDragEtDrop) =>
+        systemePlacement.onObjetPlace += (element, _modeDragEtDrop) =>
         {
             if (boutonSelectionne != null)
             {
@@ -33,6 +33,14 @@ public class ConteneurElements : MonoBehaviour
                 {
                     systemePlacement.CommencerPlacement(boutonSelectionne.elementCircuit, true, modeDragEtDrop);
                 }
+            }
+        };
+
+        systemePlacement.onPlacementArrete += (element, _modeDragEtDrop) =>
+        {
+            if (boutonSelectionne != null)
+            {
+                DeselectionnerBoutonElement();
             }
         };
     }
@@ -76,8 +84,8 @@ public class ConteneurElements : MonoBehaviour
         {
             boutonSelectionne.OnDeselectionner();
             boutonSelectionne = null;
-        }
 
-        systemePlacement.ArreterPlacement();
+            systemePlacement.ArreterPlacement();
+        }
     }
 }

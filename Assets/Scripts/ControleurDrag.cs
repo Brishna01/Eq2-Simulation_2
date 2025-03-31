@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ControlleurDrag : MonoBehaviour
+public class ControleurDrag : MonoBehaviour
 {
     private SystemePlacement systemePlacement;
 

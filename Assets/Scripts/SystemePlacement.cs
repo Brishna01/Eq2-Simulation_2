@@ -22,7 +22,8 @@ public class SystemePlacement : MonoBehaviour
     private GameObject objetAPlacer;
     private bool modeDragEtDrop;
 
-    public Action<GameObject, bool> onObjectPlace;
+    public Action<GameObject, bool> onObjetPlace;
+    public Action<GameObject, bool> onPlacementArrete;
 
     private new Camera camera;
     private EventSystem systemeEvenements;
@@ -47,8 +48,18 @@ public class SystemePlacement : MonoBehaviour
             objetAPlacer.transform.position = CalculerPositionCibleMonde();
         }
 
-        if (modeDragEtDrop && Input.GetMouseButtonUp(0)
-            || !modeDragEtDrop && Input.GetMouseButtonDown(0) && !systemeEvenements.IsPointerOverGameObject())
+        if (modeDragEtDrop && Input.GetMouseButtonUp(0))
+        {
+            if (!systemeEvenements.IsPointerOverGameObject())
+            {
+                PlacerObject();
+            }
+            else
+            {
+                ArreterPlacement();
+            }
+        }
+        else if (!modeDragEtDrop && Input.GetMouseButtonDown(0) && !systemeEvenements.IsPointerOverGameObject())
         {
             PlacerObject();
         }
@@ -76,7 +87,7 @@ public class SystemePlacement : MonoBehaviour
         GameObject objetPlace = objetAPlacer;
         objetAPlacer = null;
 
-        onObjectPlace(objetPlace, modeDragEtDrop);
+        onObjetPlace(objetPlace, modeDragEtDrop);
     }
 
     public void CommencerPlacement(GameObject objet, bool cloner)
@@ -124,6 +135,7 @@ public class SystemePlacement : MonoBehaviour
         if (objetAPlacer != null && objetAPlacer.transform.parent == transform)
         {
             Destroy(objetAPlacer);
+            onPlacementArrete(objetAPlacer, modeDragEtDrop);
             objetAPlacer = null;
         }
 
