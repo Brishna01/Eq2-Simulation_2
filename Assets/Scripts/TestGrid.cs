@@ -13,6 +13,7 @@ public class TestGrid : MonoBehaviour
     private GridParalelle grid;
     public GridParalelle gridInput;
     public int chiffre= 6;
+    public GameObject objet;
 
     private void Start()
     {
@@ -21,10 +22,10 @@ public class TestGrid : MonoBehaviour
 
     private void Update()
     {
-         if (Input.GetMouseButtonDown(0))
+         /*if (Input.GetMouseButtonDown(0))
          {
-             grid.SetValue(UtilsClass.GetMouseWorldPosition(), 56);
-         }
+             grid.SetValue(UtilsClass.GetMouseWorldPosition(), 56, objet);
+         }*/
 
     }
 
