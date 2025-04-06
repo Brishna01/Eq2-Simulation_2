@@ -76,8 +76,8 @@ public class  GridParalelle {
 
     private void GetXY (Vector3 worldposition, out int x, out int y)
     {
-       x = Mathf.FloorToInt( (worldposition.x  ) / cellSizeX);
-       y = Mathf.FloorToInt( (worldposition.y ) / cellSizeY);
+       x = Mathf.FloorToInt( (worldposition.x  -origineGrilleX  ) / cellSizeX);
+       y = Mathf.FloorToInt( (worldposition.y - origineGrilleY ) / cellSizeY);
        // x = Mathf.FloorToInt((worldposition.x -7.5f ) / cellSizeX);
         //y = Mathf.FloorToInt((worldposition.y -2f) / cellSizeY);
 
