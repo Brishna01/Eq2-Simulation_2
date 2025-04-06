@@ -42,16 +42,16 @@ public class GridParalelle : MonoBehaviour
 
         for (int laColonne = 0; laColonne < gridArray.GetLength(0); laColonne++)
         {
-            for (int j = 0; j < gridArray.GetLength(1); j++)
+            for (int laLigne = 0; laLigne < gridArray.GetLength(1); laLigne++)
             {
                 // gridArray[laColonne , j] = new Gridserie(1, lignes, 5f, laColonne +1);
 
-                debugTextArray[laColonne, j] = UtilsClass.CreateWorldText(gridArray[laColonne, j].ToString(), null, GetWorldPosition(laColonne, j) + new Vector3(cellSizeX, cellSizeY) * 0.5f, 5, Color.white, TextAnchor.MiddleCenter);
+                debugTextArray[laColonne, laLigne] = UtilsClass.CreateWorldText(gridArray[laColonne, laLigne].ToString(), null, GetWorldPosition(laColonne, laLigne) + new Vector3(cellSizeX, cellSizeY) * 0.5f, 5, Color.white, TextAnchor.MiddleCenter);
 
-                if (laColonne < gridArray.GetLength(0) - 1 && j < gridArray.GetLength(1) - 1)
+                if (laColonne < gridArray.GetLength(0) - 1 && laLigne < gridArray.GetLength(1) - 1)
                 {
-                    Debug.DrawLine(GetWorldPositionMoitie(laColonne, j), GetWorldPositionMoitie(laColonne, j + 1), Color.white, 100f);
-                    Debug.DrawLine(GetWorldPositionMoitie(laColonne, j), GetWorldPositionMoitie(laColonne + 1, j), Color.white, 100f);
+                    Debug.DrawLine(GetWorldPositionMoitie(laColonne, laLigne), GetWorldPositionMoitie(laColonne, laLigne + 1), Color.white, 100f);
+                    Debug.DrawLine(GetWorldPositionMoitie(laColonne, laLigne), GetWorldPositionMoitie(laColonne + 1, laLigne), Color.white, 100f);
 
                 }
 
@@ -97,14 +97,14 @@ public class GridParalelle : MonoBehaviour
         //y = Mathf.FloorToInt((worldposition.y -2f) / cellSizeY);
 
     }
-    public void SetValue(int x, int y, int value, GameObject objet)
+    public void SetValue(int i, int j, int value, GameObject objet)
     {
-        if (x >= 0 && y >= 0 && x < colonnes && y < lignes)
-        //           if (x>= 0+7.5f && y>=0+2f && x< width +7.5f&& y < height + 2f)
+        if (i >= 0 && j >= 0 && i < colonnes && j < lignes)
+        
         {
-            gridArray[x, y] = value;
-            debugTextArray[x, y].text = gridArray[x, y].ToString();
-            gridArrayObjet[x, y] = objet;
+            gridArray[i, j] = value;
+            debugTextArray[i, j].text = gridArray[i, j].ToString();
+            gridArrayObjet[i, j] = objet;
 
         }
     }
