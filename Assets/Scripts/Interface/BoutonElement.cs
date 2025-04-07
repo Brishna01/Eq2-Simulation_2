@@ -34,6 +34,9 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public double courant;   // Valeur pour le courant
     public double puissance; // Valeur pour la puissance
 
+
+    public TextMeshProUGUI infoElementText; // UI pour afficher le nom de l'élément
+
     // Start is called before the first frame update
     void Start()
     {
@@ -58,6 +61,10 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         courantText = GameObject.Find("TextCourant").GetComponent<TextMeshProUGUI>();
         puissanceText = GameObject.Find("TextPuissance").GetComponent<TextMeshProUGUI>();
+
+        infoElementText = GameObject.Find("Text111111").GetComponent<TextMeshProUGUI>();
+
+        infoElementText.enabled = false;
     }
 
     private void AfficherElement()
@@ -88,12 +95,20 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         rectangle.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, tailleInitiale.width * 1.05f);
         rectangle.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, tailleInitiale.height * 1.05f);
+
+        if (elementCircuit != null)
+        {
+            infoElementText.text = "Nom: " + elementCircuit.name;
+            infoElementText.enabled = true; // S'assurer que le texte est visible
+        }
     }
 
     public void OnPointerExit(PointerEventData data)
     {
         rectangle.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, tailleInitiale.width);
         rectangle.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, tailleInitiale.height);
+
+        infoElementText.enabled = false;
     }
 
     public void OnPointerDown(PointerEventData data)
