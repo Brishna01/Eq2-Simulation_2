@@ -2,25 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameObjet : MonoBehaviour
+public abstract class ElementCircuit : MonoBehaviour
 {
     // public int colonnes { get; set; }
-    private double tension, resistance, intesite, puissance;
+    public abstract double tension { get; set; }
+    public abstract double resistance { get; set; }
+    public abstract double intensite { get; set; }
+    public abstract double puissance { get; set; }
+
     private double tensionEQ ;
     private double resistanceEQ ;
-    private double intesiteEQ;
+    private double intensiteEq;
     private double puissanceEQ;
 
-
-
-    public GameObjet(double tension, double resistance, double intesite, double puissance)
+    // Start is called before the first frame update
+    void Start()
     {
-        this.tension = tension;
-        this.resistance = resistance;
-        this.intesite = intesite;
-        this.puissance = puissance;
+        
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
 
     public double TrouverResistanceEQ(GameObject[,] gridArrayObjet)
     {
@@ -47,7 +52,7 @@ public class GameObjet : MonoBehaviour
         return 0;
     }
 
-    public double TrouverPuissnceEQ()
+    public double TrouverPuissanceEQ()
     {
 
         return 0;

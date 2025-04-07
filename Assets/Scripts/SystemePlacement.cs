@@ -41,7 +41,7 @@ public class SystemePlacement : MonoBehaviour
 
         if (grillage != null)
         {
-            grillage.transform.localScale = new Vector3(grilleCircuit.colonnes, grilleCircuit.lignes, 0);
+            grillage.transform.localScale = new Vector3(grilleCircuit.colonnes + 0.1f, grilleCircuit.lignes + 0.1f, 0);
             grillage.SetActive(grillagePersistant);
         }
     }

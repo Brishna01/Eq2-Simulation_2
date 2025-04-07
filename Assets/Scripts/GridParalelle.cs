@@ -20,6 +20,8 @@ public class GridParalelle : MonoBehaviour
     private float cellSizeX;
     [SerializeField]
     private float cellSizeY;
+    [SerializeField]
+    private bool modeDebug;
 
     private float origineGrilleX;
     private float origineGrilleY;
@@ -40,38 +42,39 @@ public class GridParalelle : MonoBehaviour
         origineGrilleY = (float)(0 - lignes * cellSizeY * 0.5);
 
 
-        for (int laColonne = 0; laColonne < gridArray.GetLength(0); laColonne++)
+        if (modeDebug)
         {
-            for (int laLigne = 0; laLigne < gridArray.GetLength(1); laLigne++)
+            for (int laColonne = 0; laColonne < gridArray.GetLength(0); laColonne++)
             {
-                // gridArray[laColonne , j] = new Gridserie(1, lignes, 5f, laColonne +1);
-
-                debugTextArray[laColonne, laLigne] = UtilsClass.CreateWorldText(gridArray[laColonne, laLigne].ToString(), null, GetWorldPosition(laColonne, laLigne) + new Vector3(cellSizeX, cellSizeY) * 0.5f, 5, Color.white, TextAnchor.MiddleCenter);
-
-                if (laColonne < gridArray.GetLength(0) - 1 && laLigne < gridArray.GetLength(1) - 1)
+                for (int laLigne = 0; laLigne < gridArray.GetLength(1); laLigne++)
                 {
-                    Debug.DrawLine(GetWorldPositionMoitie(laColonne, laLigne), GetWorldPositionMoitie(laColonne, laLigne + 1), Color.white, 100f);
-                    Debug.DrawLine(GetWorldPositionMoitie(laColonne, laLigne), GetWorldPositionMoitie(laColonne + 1, laLigne), Color.white, 100f);
+                    // gridArray[laColonne , j] = new Gridserie(1, lignes, 5f, laColonne +1);
 
+                    debugTextArray[laColonne, laLigne] = UtilsClass.CreateWorldText(gridArray[laColonne, laLigne].ToString(), null, GetWorldPosition(laColonne, laLigne) + new Vector3(cellSizeX, cellSizeY) * 0.5f, 5, Color.white, TextAnchor.MiddleCenter);
+
+                    if (laColonne < gridArray.GetLength(0) - 1 && laLigne < gridArray.GetLength(1) - 1)
+                    {
+                        Debug.DrawLine(GetWorldPositionMoitie(laColonne, laLigne), GetWorldPositionMoitie(laColonne, laLigne + 1), Color.white, 100f);
+                        Debug.DrawLine(GetWorldPositionMoitie(laColonne, laLigne), GetWorldPositionMoitie(laColonne + 1, laLigne), Color.white, 100f);
+
+                    }
+
+                    //Debug.Log(laColonne + " , " + j);
                 }
-
-                //Debug.Log(laColonne + " , " + j);
             }
+            Debug.DrawLine(GetWorldPositionMoitie(0, lignes - 1), GetWorldPositionMoitie(colonnes - 1, lignes - 1), Color.white, 100f);
+            Debug.DrawLine(GetWorldPositionMoitie(colonnes - 1, 0), GetWorldPositionMoitie(colonnes - 1, lignes - 1), Color.white, 100f);
+            //Debug.Log(width + " " + height);
+            // SetValue(2, 1, 56);
         }
-        Debug.DrawLine(GetWorldPositionMoitie(0, lignes - 1), GetWorldPositionMoitie(colonnes - 1, lignes - 1), Color.white, 100f);
-        Debug.DrawLine(GetWorldPositionMoitie(colonnes - 1, 0), GetWorldPositionMoitie(colonnes - 1, lignes - 1), Color.white, 100f);
-
-        //Debug.Log(width + " " + height);
-        // SetValue(2, 1, 56);
     }
 
     void Update()
     {
-         if (Input.GetMouseButtonDown(0))
-         {
+        if (Input.GetMouseButtonDown(0))
+        {
             SetValue(UtilsClass.GetMouseWorldPosition(), 56, objet);
-         }
-
+        }
     }
 
     private Vector3 GetWorldPosition(int i, int j)
@@ -100,7 +103,7 @@ public class GridParalelle : MonoBehaviour
     public void SetValue(int i, int j, int value, GameObject objet)
     {
         if (i >= 0 && j >= 0 && i < colonnes && j < lignes)
-        
+
         {
             gridArray[i, j] = value;
             debugTextArray[i, j].text = gridArray[i, j].ToString();

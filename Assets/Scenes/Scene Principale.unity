@@ -152,10 +152,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85b9bd4be875e17498ea4ba867bed467, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <colonnes>k__BackingField: 5
+  <colonnes>k__BackingField: 6
   <lignes>k__BackingField: 4
   cellSizeX: 1
   cellSizeY: 1
+  modeDebug: 1
 --- !u!156049354 &207578895
 Grid:
   m_ObjectHideFlags: 0
@@ -242,7 +243,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 503776528}
-  - component: {fileID: 503776527}
+  - component: {fileID: 503776529}
   m_Layer: 0
   m_Name: GameObjet
   m_TagString: Untagged
@@ -250,18 +251,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &503776527
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 503776526}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31f70dc45d61360459dea7ec6891d755, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &503776528
 Transform:
   m_ObjectHideFlags: 0
@@ -277,6 +266,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &503776529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503776526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32d0e955247bd0a418232462ab18480e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <tension>k__BackingField: 0
 --- !u!1 &526546324
 GameObject:
   m_ObjectHideFlags: 0
@@ -6892,7 +6894,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   terrain: {fileID: 207578893}
-  tailleInitiale: 6
+  tailleInitiale: 4
   tailleMinimale: 2
   tailleMaximale: 6
   peutDeplacer: 1

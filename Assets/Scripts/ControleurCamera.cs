@@ -75,7 +75,7 @@ public class ControleurCamera : MonoBehaviour
     {
         if (grilleCircuit != null)
         {
-            float tailleCameraX = camera.pixelWidth / camera.pixelHeight * camera.orthographicSize * 2;
+            float tailleCameraX = camera.pixelWidth / camera.pixelHeight * camera.orthographicSize * 1.9f;
             (float, float) limitesX = CalculerLimitesCamera(-grilleCircuit.colonnes/2 - 2, grilleCircuit.colonnes/2 + 2,
                     tailleCameraX);
             (float, float) limitesY = CalculerLimitesCamera(-grilleCircuit.lignes/2 - 2, grilleCircuit.lignes/2 + 2,
