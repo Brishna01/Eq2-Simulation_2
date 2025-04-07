@@ -49,7 +49,7 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         imageBouton = GetComponent<Image>();
         imageElement = transform.Find("Image").GetComponent<Image>();
-        //texteElement = transform.Find("MeshTexte").GetComponent<TextMeshProUGUI>();
+        texteElement = transform.Find("MeshTexte").GetComponent<TextMeshProUGUI>();
         rectangle = GetComponent<RectTransform>();
         tailleInitiale = new Rect(rectangle.rect);
         couleurInitiale = imageBouton.color;
@@ -61,9 +61,8 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         courantText = GameObject.Find("TextCourant").GetComponent<TextMeshProUGUI>();
         puissanceText = GameObject.Find("TextPuissance").GetComponent<TextMeshProUGUI>();
-
-        infoElementText = GameObject.Find("Text111111").GetComponent<TextMeshProUGUI>();
-
+        infoElementText = GameObject.Find("InfoElementText").GetComponent<TextMeshProUGUI>();
+        
         infoElementText.enabled = false;
     }
 

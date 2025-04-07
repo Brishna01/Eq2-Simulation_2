@@ -4,16 +4,10 @@ using UnityEngine;
 
 public abstract class ElementCircuit : MonoBehaviour
 {
-    // public int colonnes { get; set; }
-    public abstract double tension { get; set; }
-    public abstract double resistance { get; set; }
-    public abstract double intensite { get; set; }
+    public virtual double tension { get; set; }
+    public virtual double resistance { get; set; }
+    public virtual double intensite { get; set; }
     public abstract double puissance { get; set; }
-
-    private double tensionEQ ;
-    private double resistanceEQ ;
-    private double intensiteEq;
-    private double puissanceEQ;
 
     // Start is called before the first frame update
     void Start()
@@ -29,7 +23,7 @@ public abstract class ElementCircuit : MonoBehaviour
 
     public double TrouverResistanceEQ(GameObject[,] gridArrayObjet)
     {
-        double[] resitances = new double[gridArrayObjet.GetLength(0)];
+        double[] resistances = new double[gridArrayObjet.GetLength(0)];
 
         for (int laColonne = 0; laColonne < gridArrayObjet.GetLength(0); laColonne++)
         {
