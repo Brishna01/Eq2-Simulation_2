@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 6369890627953077926}
   - component: {fileID: -1713993209846499916}
   - component: {fileID: -4183211510658837337}
+  - component: {fileID: -5871673054489102343}
+  - component: {fileID: -6328219369629393468}
   m_Layer: 0
   m_Name: Element Circuit 6
   m_TagString: Untagged
@@ -144,3 +146,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7986db5176e170e4d8d1018cc0d525ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-5871673054489102343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2533976121520307408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ab97d50915f96b43be6e5f7eba7242e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoElementText: {fileID: 0}
+  courantText: {fileID: 0}
+  puissanceText: {fileID: 0}
+--- !u!114 &-6328219369629393468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2533976121520307408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86f3d3e4fb9a5a64ba9041cac95c5cae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <resistance>k__BackingField: 0

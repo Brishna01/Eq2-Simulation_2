@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9082782494201750691}
   - component: {fileID: 6174622704114755646}
   - component: {fileID: 1571818303470630009}
+  - component: {fileID: -4894677505635535075}
   m_Layer: 0
   m_Name: Generateur Temp
   m_TagString: Untagged
@@ -156,5 +157,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7986db5176e170e4d8d1018cc0d525ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-4894677505635535075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2533976121520307408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ab97d50915f96b43be6e5f7eba7242e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

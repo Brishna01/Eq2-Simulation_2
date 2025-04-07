@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 1226148215213617270}
   - component: {fileID: 378210246349726255}
   - component: {fileID: 7491757644703613736}
+  - component: {fileID: -5193246284991930235}
+  - component: {fileID: 4845823775727261229}
   m_Layer: 0
   m_Name: Tour Temp
   m_TagString: Untagged
@@ -158,3 +160,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7986db5176e170e4d8d1018cc0d525ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-5193246284991930235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2533976121520307408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ab97d50915f96b43be6e5f7eba7242e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoElementText: {fileID: 0}
+  courantText: {fileID: 0}
+  puissanceText: {fileID: 0}
+--- !u!114 &4845823775727261229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2533976121520307408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86f3d3e4fb9a5a64ba9041cac95c5cae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <resistance>k__BackingField: 0
