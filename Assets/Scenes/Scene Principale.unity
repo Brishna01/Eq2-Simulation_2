@@ -1092,6 +1092,16 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2926667625989633147, guid: 52fca12c53d89df4b8ab8c6f3613f1a4,
+        type: 3}
+      propertyPath: m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2926667625989633147, guid: 52fca12c53d89df4b8ab8c6f3613f1a4,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 4108783147424803106, guid: 52fca12c53d89df4b8ab8c6f3613f1a4,
         type: 3}
       propertyPath: m_Pivot.x
@@ -1192,17 +1202,27 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6311457224966437161, guid: 52fca12c53d89df4b8ab8c6f3613f1a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7272104166296575839, guid: 52fca12c53d89df4b8ab8c6f3613f1a4,
         type: 3}
       propertyPath: elementCircuit
       value: 
-      objectReference: {fileID: 2533976121520307408, guid: 48f354a98495b2a4bb02198ca9252fde,
-        type: 3}
+      objectReference: {fileID: 187918, guid: 5d88dff8f09098f4e98c54655870ad6e, type: 3}
     - target: {fileID: 7714401206754726495, guid: 52fca12c53d89df4b8ab8c6f3613f1a4,
         type: 3}
       propertyPath: m_Name
       value: Bouton Element 2
       objectReference: {fileID: 0}
+    - target: {fileID: 7722522162346796228, guid: 52fca12c53d89df4b8ab8c6f3613f1a4,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 3509b9eb0db3a4a479b471828559d671,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

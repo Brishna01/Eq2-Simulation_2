@@ -77,9 +77,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6,
-    type: 3}
-  m_Color: {r: 1, g: 0.8627451, b: 0.39215687, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 3509b9eb0db3a4a479b471828559d671, type: 3}
+  m_Color: {r: 0.2509804, g: 0.2509804, b: 0.2509804, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -125,7 +124,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 2.84, y: 3.35}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -161,6 +160,8 @@ MonoBehaviour:
   infoElementText: {fileID: 0}
   courantText: {fileID: 0}
   puissanceText: {fileID: 0}
+  tensionText: {fileID: 0}
+  resistanceText: {fileID: 0}
 --- !u!114 &3242675573865361801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,4 +174,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86f3d3e4fb9a5a64ba9041cac95c5cae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <tension>k__BackingField: 0
   <resistance>k__BackingField: 0
