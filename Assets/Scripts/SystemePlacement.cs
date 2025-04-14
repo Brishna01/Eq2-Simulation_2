@@ -41,7 +41,13 @@ public class SystemePlacement : MonoBehaviour
 
         if (grillage != null)
         {
-            grillage.transform.localScale = new Vector3(grilleCircuit.colonnes - 0.9f, grilleCircuit.lignes - 0.9f, 0);
+            grillage.transform.localScale = new Vector3(grilleCircuit.colonnes - 1, grilleCircuit.lignes - 1, 0);
+            grillage.transform.position = new Vector3(
+                grilleCircuit.origineGrilleX + grillage.transform.lossyScale.x / 2 + 0.5f, 
+                grilleCircuit.origineGrilleY + grillage.transform.lossyScale.y / 2 + 0.5f, 
+                0
+            );
+            grillage.transform.localScale += new Vector3(0.05f, 0.05f, 0);
             grillage.SetActive(grillagePersistant);
         }
     }
@@ -170,8 +176,8 @@ public class SystemePlacement : MonoBehaviour
         }
 
         return new Vector3(
-            Math.Clamp(positionMonde.x, -grilleCircuit.colonnes / 2, grilleCircuit.colonnes / 2), 
-            Math.Clamp(positionMonde.y, -grilleCircuit.lignes / 2, grilleCircuit.lignes / 2), 
+            Math.Clamp(positionMonde.x, grilleCircuit.origineGrilleX + 0.5f, grilleCircuit.origineGrilleX + grilleCircuit.colonnes - 0.5f), 
+            Math.Clamp(positionMonde.y, grilleCircuit.origineGrilleY + 0.5f, grilleCircuit.origineGrilleY + grilleCircuit.lignes - 0.5f), 
             0
         );
     }

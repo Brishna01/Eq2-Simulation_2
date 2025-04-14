@@ -24,15 +24,21 @@ public class ControleurCamera : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        camera = GetComponent<Camera>();
+        camera.orthographicSize = tailleInitiale;
+
         if (terrain != null)
         {
             grilleCircuit = terrain.GetComponent<GridParalelle>();
+            camera.transform.position += new Vector3(
+                grilleCircuit.origineGrilleX + (grilleCircuit.colonnes - 1) / 2 + 0.5f, 
+                grilleCircuit.origineGrilleY + (grilleCircuit.lignes - 1) / 2 + 0.5f, 
+                0
+            );
+            camera.orthographicSize = 0.4f * Mathf.Sqrt(Mathf.Pow(grilleCircuit.colonnes, 2) + Mathf.Pow(grilleCircuit.lignes, 2));
         }
 
         positionSourisPrecedente = Input.mousePosition;
-
-        camera = GetComponent<Camera>();
-        camera.orthographicSize = tailleInitiale;
     }
 
     // Update is called once per frame
@@ -76,10 +82,16 @@ public class ControleurCamera : MonoBehaviour
         if (grilleCircuit != null)
         {
             float tailleCameraX = camera.pixelWidth / camera.pixelHeight * camera.orthographicSize * 1.9f;
-            (float, float) limitesX = CalculerLimitesCamera(-grilleCircuit.colonnes/2 - 2, grilleCircuit.colonnes/2 + 2,
-                    tailleCameraX);
-            (float, float) limitesY = CalculerLimitesCamera(-grilleCircuit.lignes/2 - 2, grilleCircuit.lignes/2 + 2,
-                    camera.orthographicSize);
+
+            (float, float) limitesX = CalculerLimitesCamera(
+                grilleCircuit.origineGrilleX - 2, 
+                grilleCircuit.origineGrilleY + grilleCircuit.colonnes + 1,
+                tailleCameraX
+            );
+            (float, float) limitesY = CalculerLimitesCamera(
+                grilleCircuit.origineGrilleY - 2, 
+                grilleCircuit.origineGrilleY + grilleCircuit.lignes + 1,
+                camera.orthographicSize);
 
             float nouveauX = Math.Clamp(camera.transform.position.x, limitesX.Item1, limitesX.Item2);
             float nouveauY = Math.Clamp(camera.transform.position.y, limitesY.Item1, limitesY.Item2);

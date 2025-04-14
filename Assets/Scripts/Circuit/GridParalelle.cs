@@ -23,25 +23,36 @@ public class GridParalelle : MonoBehaviour
     [SerializeField]
     private bool modeDebug;
 
-    private float origineGrilleX;
-    private float origineGrilleY;
+    public float origineGrilleX { get; set; }
+    public float origineGrilleY { get; set; }
 
     private GameObject objet;
 
     private TextMesh[,] debugTextArray;
 
-    void Start()
+    void Awake()
     {
         gridArray = new int[colonnes, lignes];
         gridArrayObjet = new GameObject[colonnes, lignes];
 
         debugTextArray = new TextMesh[colonnes, lignes];
 
-
         origineGrilleX = (float)(0 - colonnes * cellSizeX * 0.5);
         origineGrilleY = (float)(0 - lignes * cellSizeY * 0.5);
 
+        if (colonnes % 2 == 0) 
+        {
+            origineGrilleX += 0.5f;
+        }
 
+        if (lignes % 2 == 0) 
+        {
+            origineGrilleY += 0.5f;
+        }
+    }
+
+    void Start()
+    {
         if (modeDebug)
         {
             for (int laColonne = 0; laColonne < gridArray.GetLength(0); laColonne++)
