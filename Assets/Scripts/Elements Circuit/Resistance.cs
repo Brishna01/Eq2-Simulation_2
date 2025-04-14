@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Resistance : ElementCircuit
 {
-    [field: SerializeField]
     public override double resistance { get; set; }
     public override double puissance { get; set; }
 

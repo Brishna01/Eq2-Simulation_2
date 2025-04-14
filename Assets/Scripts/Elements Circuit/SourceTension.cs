@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SourceTension : ElementCircuit
 {
-    [field: SerializeField]
     public override double tension { get; set; }
     public override double puissance { get; set; }
 

@@ -4,7 +4,9 @@ using UnityEngine;
 
 public abstract class ElementCircuit : MonoBehaviour
 {
+    [field: SerializeField]
     public virtual double tension { get; set; }
+    [field: SerializeField]
     public virtual double resistance { get; set; }
     public virtual double intensite { get; set; }
     public abstract double puissance { get; set; }
