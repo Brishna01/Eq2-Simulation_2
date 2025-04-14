@@ -174,5 +174,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86f3d3e4fb9a5a64ba9041cac95c5cae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <tension>k__BackingField: 0
-  <resistance>k__BackingField: 0
+  <tension>k__BackingField: 90
+  <resistance>k__BackingField: 90
