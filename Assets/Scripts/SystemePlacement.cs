@@ -41,7 +41,7 @@ public class SystemePlacement : MonoBehaviour
 
         if (grillage != null)
         {
-            grillage.transform.localScale = new Vector3(grilleCircuit.colonnes + 0.1f, grilleCircuit.lignes + 0.1f, 0);
+            grillage.transform.localScale = new Vector3(grilleCircuit.colonnes - 0.9f, grilleCircuit.lignes - 0.9f, 0);
             grillage.SetActive(grillagePersistant);
         }
     }
@@ -166,9 +166,13 @@ public class SystemePlacement : MonoBehaviour
 
         if (grille != null)
         {
-            positionMonde = grille.WorldToCell(positionMonde) + new Vector3(0.5f, 0.5f, 0);
+            positionMonde = grille.WorldToCell(positionMonde + new Vector3(0.5f, 0.5f, 0));
         }
 
-        return new Vector3(positionMonde.x, positionMonde.y, 0);
+        return new Vector3(
+            Math.Clamp(positionMonde.x, -grilleCircuit.colonnes / 2, grilleCircuit.colonnes / 2), 
+            Math.Clamp(positionMonde.y, -grilleCircuit.lignes / 2, grilleCircuit.lignes / 2), 
+            0
+        );
     }
 }
