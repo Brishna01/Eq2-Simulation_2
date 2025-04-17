@@ -18,4 +18,8 @@ public class Resistance : ElementCircuit
     {
         
     }
+
+    public Resistance () { 
+    
+    }
 }

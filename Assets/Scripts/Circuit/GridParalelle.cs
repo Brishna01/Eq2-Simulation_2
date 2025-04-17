@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using CodeMonkey.Utils;
 using UnityEngine.Diagnostics;
+using static UnityEngine.Rendering.DebugUI;
+
 
 public class GridParalelle : MonoBehaviour
 {
@@ -14,7 +16,8 @@ public class GridParalelle : MonoBehaviour
     //private Gridserie[,] gridArray;
 
     private int[,] gridArray;
-    private GameObject[,] gridArrayObjet;
+    //private GameObject[,] gridArrayObjet;
+    private ElementCircuit[,] gridArrayObjet;
 
     [SerializeField]
     private float cellSizeX;
@@ -26,14 +29,18 @@ public class GridParalelle : MonoBehaviour
     public float origineGrilleX { get; set; }
     public float origineGrilleY { get; set; }
 
-    private GameObject objet;
+    //private GameObject objet;
+    private ElementCircuit objet;
+
 
     private TextMesh[,] debugTextArray;
 
     void Awake()
     {
         gridArray = new int[colonnes, lignes];
-        gridArrayObjet = new GameObject[colonnes, lignes];
+        //gridArrayObjet = new GameObject[colonnes, lignes];
+        gridArrayObjet = new ElementCircuit[colonnes, lignes];
+
 
         debugTextArray = new TextMesh[colonnes, lignes];
 
@@ -70,6 +77,8 @@ public class GridParalelle : MonoBehaviour
 
                     }
 
+                    //gridArrayObjet[laColonne, laLigne] = new Resistance();                                                                                       revoir
+
                     //Debug.Log(laColonne + " , " + j);
                 }
             }
@@ -82,10 +91,10 @@ public class GridParalelle : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+       /* if (Input.GetMouseButtonDown(0))
         {
             SetValue(UtilsClass.GetMouseWorldPosition(), 56, objet);
-        }
+        }*/
     }
 
     private Vector3 GetWorldPosition(int i, int j)
@@ -111,23 +120,28 @@ public class GridParalelle : MonoBehaviour
         //y = Mathf.FloorToInt((worldposition.y -2f) / cellSizeY);
 
     }
-    public void SetValue(int i, int j, int value, GameObject objet)
+    public void SetValue(int i, int j, int value, ElementCircuit element)
     {
         if (i >= 0 && j >= 0 && i < colonnes && j < lignes)
 
         {
             gridArray[i, j] = value;
             debugTextArray[i, j].text = gridArray[i, j].ToString();
-            gridArrayObjet[i, j] = objet;
+            //gridArrayObjet[i, j] = objet;
+            gridArrayObjet[i, j] = element;
+
 
         }
     }
 
-    public void SetValue(Vector3 worldPosition, int value, GameObject objet)
+    //public void SetValue(Vector3 worldPosition, int value, GameObject objet)
+    public void SetValue(Vector3 worldPosition, int value, ElementCircuit element)
     {
         int x, y;
         GetXY(worldPosition, out x, out y);
-        SetValue(x, y, value, objet);
+        //SetValue(x, y, value, objet);
+        SetValue(x, y, value, element);
+
 
     }
 
@@ -150,4 +164,35 @@ public class GridParalelle : MonoBehaviour
         GetXY(worldPosition, out x, out y);
         return GetValue(x, y);
     }
+
+    public void VerifierElements()
+    {
+
+        for (int laColonne = 0; laColonne < gridArray.GetLength(0); laColonne++)
+        {
+            for (int laLigne = 0; laLigne < gridArray.GetLength(1); laLigne++)
+            {
+
+                if (gridArrayObjet[laColonne, laLigne] == null && gridArray[laColonne, laLigne] != 0)
+                {
+
+                    Debug.Log("youppi!");
+                    SetValue(laColonne, laLigne, 0, null);
+
+                    /*debugTextArray[laColonne, laLigne] = UtilsClass.CreateWorldText(  "0"   , null,
+                        GetWorldPosition(laColonne, laLigne) + new Vector3(cellSizeX, cellSizeY) * 0.5f, 
+                        5, Color.white, TextAnchor.MiddleCenter);*/
+                    /* gridArray[laColonne, laLigne] = 0;
+
+                     debugTextArray[laColonne, laLigne] = UtilsClass.CreateWorldText(gridArray[laColonne, laLigne].ToString(), null, 
+                         GetWorldPosition(laColonne, laLigne) + new Vector3(cellSizeX, cellSizeY) * 0.5f, 
+                         5, Color.white, TextAnchor.MiddleCenter);
+                    */
+                }
+
+            }
+        }
+
+    }
+
 }

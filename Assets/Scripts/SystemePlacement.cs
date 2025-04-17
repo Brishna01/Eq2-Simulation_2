@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Xml.Linq;
+using CodeMonkey.Utils;
 
 public class SystemePlacement : MonoBehaviour
 {
@@ -28,6 +30,12 @@ public class SystemePlacement : MonoBehaviour
 
     private new Camera camera;
     private EventSystem systemeEvenements;
+
+    private GameObject objet;
+
+
+    private bool enlever = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -55,26 +63,52 @@ public class SystemePlacement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (objetAPlacer != null)
+
+        if (Input.GetKeyDown(KeyCode.V))
         {
-            objetAPlacer.transform.position = CalculerPositionCibleMonde();
+            enlever = !enlever;
+            EnleverObject();
         }
 
-        if (modeDragEtDrop && Input.GetMouseButtonUp(0))
+        if (enlever == true)
         {
-            if (!systemeEvenements.IsPointerOverGameObject())
+            if (Input.GetMouseButtonDown(0))
+            {
+                //grilleCircuit.SetValue(UtilsClass.GetMouseWorldPosition(), 0, null);
+                grilleCircuit.SetValue(UtilsClass.GetMouseWorldPosition(), 0, null);
+            }
+
+        }
+        else
+        {
+
+            if (objetAPlacer != null)
+            {
+                objetAPlacer.transform.position = CalculerPositionCibleMonde();
+            }
+
+            if (modeDragEtDrop && Input.GetMouseButtonUp(0))
+            {
+                if (!systemeEvenements.IsPointerOverGameObject())
+                {
+                    PlacerObject();
+
+                    grilleCircuit.SetValue(UtilsClass.GetMouseWorldPosition(), 56, new Resistance());
+                    //https://discussions.unity.com/t/can-i-create-a-subclass-of-the-gameobject-class/250404
+
+                }
+                else
+                {
+                    ArreterPlacement();
+                }
+            }
+            else if (!modeDragEtDrop && Input.GetMouseButtonDown(0) && !systemeEvenements.IsPointerOverGameObject())
             {
                 PlacerObject();
             }
-            else
-            {
-                ArreterPlacement();
-            }
         }
-        else if (!modeDragEtDrop && Input.GetMouseButtonDown(0) && !systemeEvenements.IsPointerOverGameObject())
-        {
-            PlacerObject();
-        }
+
+        //grilleCircuit.VerifierElements();
     }
 
     private void PlacerObject()
@@ -101,6 +135,33 @@ public class SystemePlacement : MonoBehaviour
 
         onObjetPlace(objetPlace, modeDragEtDrop);
     }
+
+
+    private void EnleverObject()
+    {
+        /* if (objetAPlacer = null)  {
+             return;
+         }*/
+        if (objetAPlacer != null)  {
+            objetAPlacer = null;
+        }
+
+        /*SpriteRenderer afficheurSprite = objetAPlacer.GetComponent<SpriteRenderer>();
+        if (afficheurSprite != null) {
+            Color couleur = afficheurSprite.color;
+            afficheurSprite.color = new Color(couleur.r, couleur.g, couleur.b);
+        }*/
+
+        /*if (conteneurObjets != null) {
+            objetAPlacer.transform.parent = conteneurObjets.transform;
+        }*/
+
+        GameObject objetPlace = objetAPlacer;
+        // objetAPlacer = null;
+
+        onObjetPlace(null, modeDragEtDrop);
+    }
+
 
     public void CommencerPlacement(GameObject objet, bool cloner)
     {
