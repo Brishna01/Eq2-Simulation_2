@@ -11,6 +11,9 @@ public abstract class ElementCircuit : MonoBehaviour
     public virtual double intensite { get; set; }
     public abstract double puissance { get; set; }
 
+    public int positionGrilleX { get; set; } = -1;
+    public int positionGrilleY { get; set; } = -1;
+
     // Start is called before the first frame update
     void Start()
     {

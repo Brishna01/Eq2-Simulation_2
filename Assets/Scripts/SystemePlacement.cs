@@ -11,7 +11,7 @@ public class SystemePlacement : MonoBehaviour
     [SerializeField]
     private GameObject terrain;
     private Grid grille;
-    private GridParalelle grilleCircuit;
+    private GrilleCircuit grilleCircuit;
     private GameObject grillage;
     [SerializeField]
     private bool grillagePersistant;
@@ -33,15 +33,13 @@ public class SystemePlacement : MonoBehaviour
 
     private GameObject objet;
 
-
-    private bool enlever = false;
-
+    public bool enlever { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
         grille = terrain.GetComponent<Grid>();
-        grilleCircuit = terrain.GetComponent<GridParalelle>();
+        grilleCircuit = terrain.GetComponent<GrilleCircuit>();
         grillage = terrain.transform.Find("Grillage").gameObject;
 
         camera = GameObject.Find("Main Camera").GetComponent<Camera>();
@@ -67,21 +65,11 @@ public class SystemePlacement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.V))
         {
             enlever = !enlever;
-            EnleverObject();
+            ArreterPlacement();
         }
 
-        if (enlever == true)
+        if (!enlever)
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                //grilleCircuit.SetValue(UtilsClass.GetMouseWorldPosition(), 0, null);
-                grilleCircuit.SetValue(UtilsClass.GetMouseWorldPosition(), 0, null);
-            }
-
-        }
-        else
-        {
-
             if (objetAPlacer != null)
             {
                 objetAPlacer.transform.position = CalculerPositionCibleMonde();
@@ -92,10 +80,6 @@ public class SystemePlacement : MonoBehaviour
                 if (!systemeEvenements.IsPointerOverGameObject())
                 {
                     PlacerObject();
-
-                    grilleCircuit.SetValue(UtilsClass.GetMouseWorldPosition(), 56, new Resistance());
-                    //https://discussions.unity.com/t/can-i-create-a-subclass-of-the-gameobject-class/250404
-
                 }
                 else
                 {
@@ -107,8 +91,6 @@ public class SystemePlacement : MonoBehaviour
                 PlacerObject();
             }
         }
-
-        //grilleCircuit.VerifierElements();
     }
 
     private void PlacerObject()
@@ -117,6 +99,8 @@ public class SystemePlacement : MonoBehaviour
         {
             return;
         }
+
+        ElementCircuit elementCircuit = objetAPlacer.GetComponent<ElementCircuit>();
 
         SpriteRenderer afficheurSprite = objetAPlacer.GetComponent<SpriteRenderer>();
         if (afficheurSprite != null)
@@ -130,38 +114,21 @@ public class SystemePlacement : MonoBehaviour
             objetAPlacer.transform.parent = conteneurObjets.transform;
         }
 
+        Vector3 positionGrille = grilleCircuit.GetPositionGrille(objetAPlacer.transform.position);
+        ElementCircuit elementExistant = grilleCircuit.GetElement((int)positionGrille.x, (int)positionGrille.y);
+        
+        if (elementExistant && elementExistant != elementCircuit)
+        {
+            Destroy(elementExistant.gameObject);
+        }
+
+        grilleCircuit.SetElement((int)positionGrille.x, (int)positionGrille.y, elementCircuit);
+
         GameObject objetPlace = objetAPlacer;
         objetAPlacer = null;
 
         onObjetPlace(objetPlace, modeDragEtDrop);
     }
-
-
-    private void EnleverObject()
-    {
-        /* if (objetAPlacer = null)  {
-             return;
-         }*/
-        if (objetAPlacer != null)  {
-            objetAPlacer = null;
-        }
-
-        /*SpriteRenderer afficheurSprite = objetAPlacer.GetComponent<SpriteRenderer>();
-        if (afficheurSprite != null) {
-            Color couleur = afficheurSprite.color;
-            afficheurSprite.color = new Color(couleur.r, couleur.g, couleur.b);
-        }*/
-
-        /*if (conteneurObjets != null) {
-            objetAPlacer.transform.parent = conteneurObjets.transform;
-        }*/
-
-        GameObject objetPlace = objetAPlacer;
-        // objetAPlacer = null;
-
-        onObjetPlace(null, modeDragEtDrop);
-    }
-
 
     public void CommencerPlacement(GameObject objet, bool cloner)
     {

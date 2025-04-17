@@ -5,7 +5,7 @@ public class ControleurCamera : MonoBehaviour
 {
     [SerializeField]
     private GameObject terrain;
-    private GridParalelle grilleCircuit;
+    private GrilleCircuit grilleCircuit;
 
     [SerializeField]
     private float tailleInitiale;
@@ -29,7 +29,7 @@ public class ControleurCamera : MonoBehaviour
 
         if (terrain != null)
         {
-            grilleCircuit = terrain.GetComponent<GridParalelle>();
+            grilleCircuit = terrain.GetComponent<GrilleCircuit>();
             camera.transform.position += new Vector3(
                 grilleCircuit.origineGrilleX + (grilleCircuit.colonnes - 1) / 2 + 0.5f, 
                 grilleCircuit.origineGrilleY + (grilleCircuit.lignes - 1) / 2 + 0.5f, 
