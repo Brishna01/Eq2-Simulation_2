@@ -68,32 +68,30 @@ public class SystemePlacement : MonoBehaviour
             ArreterPlacement();
         }
 
-        if (!enlever)
+        if (objetAPlacer != null)
         {
-            if (objetAPlacer != null)
-            {
-                objetAPlacer.transform.position = CalculerPositionCibleMonde();
-            }
+            objetAPlacer.transform.position = CalculerPositionCibleMonde();
+        }
 
-            if (modeDragEtDrop && Input.GetMouseButtonUp(0))
+        if (modeDragEtDrop && Input.GetMouseButtonUp(0))
+        {
+            if (!systemeEvenements.IsPointerOverGameObject())
             {
-                if (!systemeEvenements.IsPointerOverGameObject())
-                {
-                    PlacerObject();
-                }
-                else
-                {
-                    ArreterPlacement();
-                }
+                PlacerObjet();
             }
-            else if (!modeDragEtDrop && Input.GetMouseButtonDown(0) && !systemeEvenements.IsPointerOverGameObject())
+            else
             {
-                PlacerObject();
+                ArreterPlacement();
             }
         }
+        else if (!modeDragEtDrop && Input.GetMouseButtonDown(0) && !systemeEvenements.IsPointerOverGameObject())
+        {
+            PlacerObjet();
+        }
+    
     }
 
-    private void PlacerObject()
+    private void PlacerObjet()
     {
         if (objetAPlacer == null)
         {
@@ -114,15 +112,14 @@ public class SystemePlacement : MonoBehaviour
             objetAPlacer.transform.parent = conteneurObjets.transform;
         }
 
-        Vector3 positionGrille = grilleCircuit.GetPositionGrille(objetAPlacer.transform.position);
-        ElementCircuit elementExistant = grilleCircuit.GetElement((int)positionGrille.x, (int)positionGrille.y);
-        
+        ElementCircuit elementExistant = grilleCircuit.GetElement(objetAPlacer.transform.position);
         if (elementExistant && elementExistant != elementCircuit)
         {
             Destroy(elementExistant.gameObject);
         }
 
-        grilleCircuit.SetElement((int)positionGrille.x, (int)positionGrille.y, elementCircuit);
+        grilleCircuit.SetElement(objetAPlacer.transform.position, elementCircuit);
+        grilleCircuit.SetValeur(objetAPlacer.transform.position, 56);
 
         GameObject objetPlace = objetAPlacer;
         objetAPlacer = null;
@@ -144,6 +141,7 @@ public class SystemePlacement : MonoBehaviour
         }
 
         modeDragEtDrop = _modeDragEtDrop;
+        enlever = false;
 
         if (cloner)
         {

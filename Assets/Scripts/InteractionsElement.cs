@@ -25,8 +25,8 @@ public class InteractionsElement : MonoBehaviour
     {
         if (systemePlacement.enlever)
         {
-            Vector3 positionGrille = grilleCircuit.GetPositionGrille(transform.position);
-            grilleCircuit.SetElement((int)positionGrille.x, (int)positionGrille.y, null);
+            grilleCircuit.SetElement(transform.position, null);
+            grilleCircuit.SetValeur(transform.position, 0);
 
             Destroy(gameObject);
         }
