@@ -147,7 +147,11 @@ public class GrilleCircuit : MonoBehaviour
         if (i >= 0 && j >= 0 && i < colonnes && j < lignes)
         {
             matriceValeurs[i, j] = valeur;
-            debugTextArray[i, j].text = matriceValeurs[i, j].ToString();
+
+            if (modeDebug)
+            {
+                debugTextArray[i, j].text = matriceValeurs[i, j].ToString();
+            }
         }
     }
 
