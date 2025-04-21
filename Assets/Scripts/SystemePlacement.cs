@@ -10,7 +10,6 @@ public class SystemePlacement : MonoBehaviour
 {
     [SerializeField]
     private GameObject terrain;
-    private Grid grille;
     private GrilleCircuit grilleCircuit;
     private GameObject grillage;
     [SerializeField]
@@ -23,6 +22,7 @@ public class SystemePlacement : MonoBehaviour
     private Vector2 decalageCurseur;
 
     private GameObject objetAPlacer;
+    private Vector3? positionInitiale;
     private bool modeDragEtDrop;
 
     public Action<GameObject, bool> onObjetPlace;
@@ -31,14 +31,11 @@ public class SystemePlacement : MonoBehaviour
     private new Camera camera;
     private EventSystem systemeEvenements;
 
-    private GameObject objet;
-
     public bool enlever { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
-        grille = terrain.GetComponent<Grid>();
         grilleCircuit = terrain.GetComponent<GrilleCircuit>();
         grillage = terrain.transform.Find("Grillage").gameObject;
 
@@ -49,10 +46,21 @@ public class SystemePlacement : MonoBehaviour
         {
             grillage.transform.localScale = new Vector3(grilleCircuit.colonnes - 1, grilleCircuit.lignes - 1, 0);
             grillage.transform.position = new Vector3(
-                grilleCircuit.origineGrilleX + grillage.transform.lossyScale.x / 2 + 0.5f, 
-                grilleCircuit.origineGrilleY + grillage.transform.lossyScale.y / 2 + 0.5f, 
+                grilleCircuit.origineX + grillage.transform.lossyScale.x / 2 + 0.5f, 
+                grilleCircuit.origineY + grillage.transform.lossyScale.y / 2 + 0.5f, 
                 0
             );
+
+            if (grilleCircuit.colonnes % 2 == 0)
+            {
+                grillage.transform.position -= new Vector3(0.5f, 0, 0);
+            }
+
+            if (grilleCircuit.lignes % 2 == 0)
+            {
+                grillage.transform.position -= new Vector3(0, 0.5f, 0);
+            }
+
             grillage.transform.localScale += new Vector3(0.05f, 0.05f, 0);
             grillage.SetActive(grillagePersistant);
         }
@@ -100,26 +108,36 @@ public class SystemePlacement : MonoBehaviour
 
         ElementCircuit elementCircuit = objetAPlacer.GetComponent<ElementCircuit>();
 
-        SpriteRenderer afficheurSprite = objetAPlacer.GetComponent<SpriteRenderer>();
-        if (afficheurSprite != null)
-        {
-            Color couleur = afficheurSprite.color;
-            afficheurSprite.color = new Color(couleur.r, couleur.g, couleur.b);
-        }
-
         if (conteneurObjets != null)
         {
             objetAPlacer.transform.parent = conteneurObjets.transform;
         }
 
-        ElementCircuit elementExistant = grilleCircuit.GetElement(objetAPlacer.transform.position);
-        if (elementExistant && elementExistant != elementCircuit)
+        Vector3 positionMondeArete = GetPositionMondeArete(objetAPlacer.transform.position);
+        if ((objetAPlacer.transform.position - positionMondeArete).magnitude < 0.1)
         {
-            Destroy(elementExistant.gameObject);
-        }
+            ElementCircuit elementExistant = grilleCircuit.GetElement(objetAPlacer.transform.position);
 
-        grilleCircuit.SetElement(objetAPlacer.transform.position, elementCircuit);
-        grilleCircuit.SetValeur(objetAPlacer.transform.position, 56);
+            if (elementExistant && elementExistant != elementCircuit)
+            {
+                if (positionInitiale != null)
+                {
+                    elementExistant.gameObject.transform.position = (Vector3)positionInitiale;
+                    grilleCircuit.SetElement((Vector3)positionInitiale, elementExistant);
+                }
+                else
+                {
+                    grilleCircuit.RetirerElement(elementExistant);
+                    Destroy(elementExistant.gameObject);
+                }
+            }
+
+            grilleCircuit.SetElement(objetAPlacer.transform.position, elementCircuit);
+        }
+        else
+        {
+            grilleCircuit.RetirerElement(elementCircuit);
+        }
 
         GameObject objetPlace = objetAPlacer;
         objetAPlacer = null;
@@ -147,20 +165,15 @@ public class SystemePlacement : MonoBehaviour
         {
             objetAPlacer = Instantiate(objet, transform);
             objetAPlacer.name = objet.name;
+            positionInitiale = null;
         }
         else
         {
             objetAPlacer = objet;
+            positionInitiale = objet.transform.position;
         }
 
         objetAPlacer.transform.position = CalculerPositionCibleMonde();
-
-        SpriteRenderer afficheurSprite = objetAPlacer.GetComponent<SpriteRenderer>();
-        if (afficheurSprite != null)
-        {
-            Color couleur = afficheurSprite.color;
-            afficheurSprite.color = new Color(couleur.r, couleur.g, couleur.b, 0.8f);
-        }
 
         if (grillage != null)
         {
@@ -175,6 +188,7 @@ public class SystemePlacement : MonoBehaviour
             Destroy(objetAPlacer);
             onPlacementArrete(objetAPlacer, modeDragEtDrop);
             objetAPlacer = null;
+            positionInitiale = null;
         }
 
         if (grillage != null && !grillagePersistant)
@@ -195,16 +209,23 @@ public class SystemePlacement : MonoBehaviour
     {
         Vector3 positionEcran = Input.mousePosition + new Vector3(decalageCurseur.x, decalageCurseur.y, 0);
         Vector3 positionMonde = camera.ScreenToWorldPoint(positionEcran);
+        positionMonde.z = 0;
 
-        if (grille != null)
+        (Vector2 point1, Vector2 point2) = grilleCircuit.GetArete(positionMonde);
+        Vector3 positionMondeArete = GetPositionMondeArete(positionMonde);
+
+        if (grilleCircuit.EstDedans(point1) && grilleCircuit.EstDedans(point2) && (positionMonde - positionMondeArete).magnitude < 0.3)
         {
-            positionMonde = grille.WorldToCell(positionMonde + new Vector3(0.5f, 0.5f, 0));
+            return positionMondeArete;
         }
 
-        return new Vector3(
-            Math.Clamp(positionMonde.x, grilleCircuit.origineGrilleX + 0.5f, grilleCircuit.origineGrilleX + grilleCircuit.colonnes - 0.5f), 
-            Math.Clamp(positionMonde.y, grilleCircuit.origineGrilleY + 0.5f, grilleCircuit.origineGrilleY + grilleCircuit.lignes - 0.5f), 
-            0
-        );
+        return positionMonde;
+    }
+
+    private Vector3 GetPositionMondeArete(Vector3 positionMonde)
+    {
+        (Vector2 point1, Vector2 point2) = grilleCircuit.GetArete(positionMonde);
+
+        return grilleCircuit.GetPositionMonde((point1.x + point2.x) / 2, (point1.y + point2.y) / 2);
     }
 }
