@@ -11,9 +11,6 @@ public class SystemePlacement : MonoBehaviour
     [SerializeField]
     private GameObject terrain;
     private GrilleCircuit grilleCircuit;
-    private GameObject grillage;
-    [SerializeField]
-    private bool grillagePersistant;
 
     [SerializeField]
     private GameObject conteneurObjets;
@@ -37,33 +34,9 @@ public class SystemePlacement : MonoBehaviour
     void Start()
     {
         grilleCircuit = terrain.GetComponent<GrilleCircuit>();
-        grillage = terrain.transform.Find("Grillage").gameObject;
 
         camera = GameObject.Find("Main Camera").GetComponent<Camera>();
         systemeEvenements = GameObject.Find("EventSystem").GetComponent<EventSystem>();
-
-        if (grillage != null)
-        {
-            grillage.transform.localScale = new Vector3(grilleCircuit.colonnes - 1, grilleCircuit.lignes - 1, 0);
-            grillage.transform.position = new Vector3(
-                grilleCircuit.origineX + grillage.transform.lossyScale.x / 2 + 0.5f, 
-                grilleCircuit.origineY + grillage.transform.lossyScale.y / 2 + 0.5f, 
-                0
-            );
-
-            if (grilleCircuit.colonnes % 2 == 0)
-            {
-                grillage.transform.position -= new Vector3(0.5f, 0, 0);
-            }
-
-            if (grilleCircuit.lignes % 2 == 0)
-            {
-                grillage.transform.position -= new Vector3(0, 0.5f, 0);
-            }
-
-            grillage.transform.localScale += new Vector3(0.05f, 0.05f, 0);
-            grillage.SetActive(grillagePersistant);
-        }
     }
 
     // Update is called once per frame
@@ -174,11 +147,6 @@ public class SystemePlacement : MonoBehaviour
         }
 
         objetAPlacer.transform.position = CalculerPositionCibleMonde();
-
-        if (grillage != null)
-        {
-            grillage.SetActive(true);
-        }
     }
 
     public void ArreterPlacement()
@@ -189,11 +157,6 @@ public class SystemePlacement : MonoBehaviour
             onPlacementArrete(objetAPlacer, modeDragEtDrop);
             objetAPlacer = null;
             positionInitiale = null;
-        }
-
-        if (grillage != null && !grillagePersistant)
-        {
-            grillage.SetActive(false);
         }
     }
 

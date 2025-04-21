@@ -16,6 +16,8 @@ public class GrilleCircuit : MonoBehaviour
     [SerializeField]
     private float tailleCelluleY;
     [SerializeField]
+    private GameObject prefabLigneGrille;
+    [SerializeField]
     private bool modeDebug;
 
     public float origineX { get; private set; }
@@ -35,21 +37,43 @@ public class GrilleCircuit : MonoBehaviour
 
         origineX = (float)(0 - (colonnes - 1) * tailleCelluleX * 0.5);
         origineY = (float)(0 - (lignes - 1) * tailleCelluleY * 0.5);
-
-        if (colonnes % 2 == 0)
-        {
-            origineX += 0.5f;
-        }
-
-        if (lignes % 2 == 0)
-        {
-            origineY += 0.5f;
-        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        for (int ligne = 0; ligne < lignes; ligne++)
+        {
+            GameObject ligneGrille = Instantiate(prefabLigneGrille);
+            LineRenderer afficheurLigne = ligneGrille.GetComponent<LineRenderer>();
+            
+            Vector3[] positions = {GetPositionMonde(0, ligne), GetPositionMonde(colonnes - 1, ligne)};
+            afficheurLigne.SetPositions(positions);
+
+            Color couleur = afficheurLigne.startColor;
+            couleur.a = 0.3f;
+            afficheurLigne.startColor = couleur;
+            afficheurLigne.endColor = couleur;
+
+            ligneGrille.transform.parent = transform.Find("Grillage").transform;
+        }
+
+        for (int colonne = 0; colonne < colonnes; colonne++)
+        {
+            GameObject ligneGrille = Instantiate(prefabLigneGrille);
+            LineRenderer afficheurLigne = ligneGrille.GetComponent<LineRenderer>();
+            
+            Vector3[] positions = {GetPositionMonde(colonne, 0), GetPositionMonde(colonne, lignes - 1)};
+            afficheurLigne.SetPositions(positions);
+
+            Color couleur = afficheurLigne.startColor;
+            couleur.a = 0.3f;
+            afficheurLigne.startColor = couleur;
+            afficheurLigne.endColor = couleur;
+
+            ligneGrille.transform.parent = transform.Find("Grillage").transform;
+        }
+
         if (modeDebug)
         {
             for (int ligne = 0; ligne < lignes; ligne++)
