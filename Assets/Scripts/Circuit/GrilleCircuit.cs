@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CodeMonkey.Utils;
 using System;
-using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.Mathematics;
 
 public class GrilleCircuit : MonoBehaviour
 {
@@ -170,6 +170,42 @@ public class GrilleCircuit : MonoBehaviour
         }
     }
 
+    public FilElectrique GetFil(Vector2 point1, Vector2 point2)
+    {
+        FilElectrique fil;
+        matriceFils.TryGetValue((point1, point2), out fil);
+
+        return fil;
+    }
+
+    public void SetFil(Vector2 point1, Vector2 point2, FilElectrique fil)
+    {
+        if (fil != null)
+        {
+            RetirerElement(fil);
+        }
+
+        if (EstDedans(point1) && EstDedans(point2))
+        {
+            matriceFils[(point1, point2)] = fil;
+            matriceFils[(point2, point1)] = fil;
+
+            if (fil != null)
+            {
+                fil.point1 = point1;
+                fil.point2 = point2;
+            }
+        }
+    }
+
+    public void RetirerFil(FilElectrique fil)
+    {
+        if (fil != null && GetFil(fil.point1, fil.point2) == fil)
+        {
+            SetElement(fil.point1, fil.point2, null);
+        }
+    }
+
     public int GetValeur(Vector2 point1, Vector2 point2)
     {
         int valeur;
@@ -213,12 +249,18 @@ public class GrilleCircuit : MonoBehaviour
         SetValeur(point1, point2, valeur);
     }
 
-    public (Vector2 point1, Vector2 point2) GetArete(Vector3 positionMonde)
+    public Vector2 GetPoint(Vector3 positionMonde)
     {
         Vector3 positionGrilleAlignee = GetPositionGrilleAlignee(positionMonde);
+
+        return new Vector2(Math.Clamp(positionGrilleAlignee.x, 0, colonnes - 1), Math.Clamp(positionGrilleAlignee.y, 0, lignes - 1));
+    }
+
+    public (Vector2 point1, Vector2 point2) GetArete(Vector3 positionMonde)
+    {
         Vector3 positionMondeAlignee = GetPositionMondeAlignee(positionMonde);
 
-        Vector2 point1 = new Vector2(positionGrilleAlignee.x, positionGrilleAlignee.y);
+        Vector2 point1 = GetPoint(positionMonde);
         Vector2 point2;
 
         if (Math.Abs(positionMonde.x - positionMondeAlignee.x) > Math.Abs(positionMonde.y - positionMondeAlignee.y))
@@ -281,5 +323,17 @@ public class GrilleCircuit : MonoBehaviour
     public bool EstDedans(Vector2 point)
     {
         return point.x >= 0 && point.x < colonnes * tailleCelluleX && point.y >= 0 && point.y < lignes * tailleCelluleY;
+    }
+
+    public bool EstDedans(Vector3 positionMonde)
+    {
+        return positionMonde.x >= origineX && positionMonde.x < origineX + colonnes * tailleCelluleX 
+            && positionMonde.y >= origineY && positionMonde.y <  origineY + lignes * tailleCelluleY;
+    }
+
+    public bool SontAdjacents(Vector2 point1, Vector2 point2)
+    {
+        return point1.x == point2.x && Math.Abs(point2.y - point1.y) <= 1
+            || point1.y == point2.y && Math.Abs(point2.x - point1.x) <= 1;
     }
 }

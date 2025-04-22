@@ -353,7 +353,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   terrain: {fileID: 207578893}
   conteneurObjets: {fileID: 1215419304}
-  decalageCurseur: {x: 0, y: 0}
+  prefabFilElectrique: {fileID: 7695442913613723924, guid: bd58ab5e84b0b84499c8850ee612589c,
+    type: 3}
 --- !u!4 &283723379
 Transform:
   m_ObjectHideFlags: 0

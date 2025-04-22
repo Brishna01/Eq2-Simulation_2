@@ -1,16 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class InteractionsElement : MonoBehaviour
 {
+    private ElementCircuit elementCircuit;
     private GrilleCircuit grilleCircuit;
     private SystemePlacement systemePlacement;
 
     // Start is called before the first frame update
     void Start()
     {
+        elementCircuit = GetComponent<ElementCircuit>();
         grilleCircuit = GameObject.Find("Terrain").GetComponent<GrilleCircuit>();
         systemePlacement = GameObject.Find("SystemePlacement").GetComponent<SystemePlacement>();
     }
@@ -23,16 +26,15 @@ public class InteractionsElement : MonoBehaviour
 
     public void OnMouseDown()
     {
-        if (systemePlacement.enlever)
+        switch (systemePlacement.outilSelectionne)
         {
-            grilleCircuit.SetElement(transform.position, null);
-            grilleCircuit.SetValeur(transform.position, 0);
-
-            Destroy(gameObject);
-        }
-        else
-        {
-            systemePlacement.CommencerPlacement(gameObject, false, true);
+            case Outil.DeplacerElements:
+                systemePlacement.CommencerPlacement(gameObject, false, true);
+                break;
+            case Outil.Supprimer:
+                grilleCircuit.RetirerElement(elementCircuit);
+                Destroy(gameObject);
+                break;
         }
     }
 }

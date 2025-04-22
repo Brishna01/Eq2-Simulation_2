@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FilElectrique : MonoBehaviour
+public class FilElectrique : ElementCircuit
 {
+    public override double puissance { get; set; }
+
     public Vector2 point1 { get; set; }
     public Vector2 point2 { get; set; }
 

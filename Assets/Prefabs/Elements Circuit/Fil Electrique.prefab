@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1562617114128331620}
   - component: {fileID: 4631977355035304280}
+  - component: {fileID: -8458499001327951373}
   m_Layer: 0
   m_Name: Fil Electrique
   m_TagString: Untagged
@@ -136,3 +137,17 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &-8458499001327951373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7695442913613723924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83a64e3307a30fa42aee2e3c4a63878f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <tension>k__BackingField: 0
+  <resistance>k__BackingField: 0
