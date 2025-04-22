@@ -6,9 +6,6 @@ public class FilElectrique : ElementCircuit
 {
     public override double puissance { get; set; }
 
-    public Vector2 point1 { get; set; }
-    public Vector2 point2 { get; set; }
-
     // Start is called before the first frame update
     void Start()
     {

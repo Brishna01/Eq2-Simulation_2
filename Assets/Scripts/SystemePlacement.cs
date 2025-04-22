@@ -10,7 +10,6 @@ public class SystemePlacement : MonoBehaviour
     [SerializeField]
     private GameObject terrain;
     private GrilleCircuit grilleCircuit;
-
     [SerializeField]
     private GameObject conteneurObjets;
     [SerializeField]
@@ -19,11 +18,10 @@ public class SystemePlacement : MonoBehaviour
     private GameObject objetAPlacer;
     private Vector3? positionInitiale;
     private bool modeDragEtDrop;
-    public Outil outilSelectionne { get; private set; } = Outil.DeplacerElements;
 
-    private GameObject filElectrique;
-    private Vector2? pointPrecedent;
+    public Outil outilSelectionne { get; private set; } = Outil.TracerFils;
     private bool boutonGaucheEnfonce;
+    private Vector2Int? pointPrecedent;
 
     public Action<GameObject, bool> onObjetPlace;
     public Action<GameObject, bool> onPlacementArrete;
@@ -55,7 +53,12 @@ public class SystemePlacement : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
-            outilSelectionne = Outil.Supprimer;
+            outilSelectionne = Outil.SupprimerFils;
+            ArreterPlacement();
+        }
+        else if (Input.GetKeyDown(KeyCode.R))
+        {
+            outilSelectionne = Outil.SupprimerElements;
             ArreterPlacement();
         }
 
@@ -70,43 +73,63 @@ public class SystemePlacement : MonoBehaviour
 
         if (objetAPlacer != null)
         {
-            objetAPlacer.transform.position = CalculerPositionCibleMonde();
-
-            if (modeDragEtDrop && Input.GetMouseButtonUp(0))
-            {
-                if (!systemeEvenements.IsPointerOverGameObject())
-                {
-                    PlacerObjet();
-                }
-                else
-                {
-                    ArreterPlacement();
-                }
-            }
-            else if (!modeDragEtDrop && Input.GetMouseButtonDown(0) && !systemeEvenements.IsPointerOverGameObject())
-            {
-                PlacerObjet();
-            }
+            UpdatePlacement();
         }
         else if (outilSelectionne == Outil.TracerFils)
         {
-            if (boutonGaucheEnfonce)
+            UpdateTracerFils();
+        }
+        else if (outilSelectionne == Outil.SupprimerFils)
+        {
+            UpdateSupprimerFils();
+        }
+        else if (outilSelectionne == Outil.SupprimerElements)
+        {
+            UpdateSupprimerElements();
+        }
+    }
+
+    private void UpdatePlacement()
+    {
+        objetAPlacer.transform.position = CalculerPositionCibleMonde();
+
+        if (modeDragEtDrop && Input.GetMouseButtonUp(0))
+        {
+            if (!systemeEvenements.IsPointerOverGameObject())
             {
-                Vector3 positionMonde = camera.ScreenToWorldPoint(Input.mousePosition);
-                positionMonde.z = 0;
+                PlacerObjet();
+            }
+            else
+            {
+                ArreterPlacement();
+            }
+        }
+        else if (!modeDragEtDrop && Input.GetMouseButtonDown(0) && !systemeEvenements.IsPointerOverGameObject())
+        {
+            PlacerObjet();
+        }
+    }
 
-                Vector2 point = grilleCircuit.GetPoint(positionMonde);
-                Vector3 positionMondePoint = grilleCircuit.GetPositionMonde(point.x, point.y);
+    private void UpdateTracerFils()
+    {
+        if (boutonGaucheEnfonce)
+        {
+            Vector3 positionMonde = camera.ScreenToWorldPoint(Input.mousePosition);
+            positionMonde.z = 0;
 
-                if ((positionMonde - positionMondePoint).magnitude < 0.2)
+            Vector2Int point = grilleCircuit.GetPoint(positionMonde);
+            Vector3 positionMondePoint = grilleCircuit.GetPositionMonde(point.x, point.y);
+
+            if ((positionMonde - positionMondePoint).magnitude < 0.5)
+            {
+                if (pointPrecedent == null && Input.GetMouseButtonDown(0))
                 {
-                    if (pointPrecedent == null && Input.GetMouseButtonDown(0))
-                    {
-                        pointPrecedent = point;
-                    }
-                    else if (pointPrecedent != null && point != pointPrecedent 
-                        && grilleCircuit.SontAdjacents(point, (Vector2)pointPrecedent)
-                        && !grilleCircuit.GetFil(point, (Vector2)pointPrecedent))
+                    pointPrecedent = point;
+                }
+                else if (pointPrecedent != null && point != pointPrecedent
+                    && grilleCircuit.SontAdjacents(point, (Vector2Int)pointPrecedent))
+                {
+                    if (!grilleCircuit.GetFil(point, (Vector2Int)pointPrecedent))
                     {
                         GameObject filElectrique = Instantiate(prefabFilElectrique);
                         LineRenderer afficheurLigne = filElectrique.GetComponent<LineRenderer>();
@@ -118,88 +141,60 @@ public class SystemePlacement : MonoBehaviour
                         afficheurLigne.SetPositions(positions);
 
                         filElectrique.transform.parent = conteneurObjets.transform;
-                        grilleCircuit.SetFil(point, (Vector2)pointPrecedent, filElectrique.GetComponent<FilElectrique>());
+                        grilleCircuit.SetFil(point, (Vector2Int)pointPrecedent, filElectrique.GetComponent<FilElectrique>());
                     }
 
-                    if (grilleCircuit.SontAdjacents(point, (Vector2)pointPrecedent))
-                    {
-                        pointPrecedent = point;
-                    }
+                    pointPrecedent = point;
                 }
             }
-            else if (Input.GetMouseButtonUp(0))
-            {
-                pointPrecedent = null;
-            }
         }
-        else if (outilSelectionne == Outil.Supprimer)
+        else if (Input.GetMouseButtonUp(0))
         {
-            if (boutonGaucheEnfonce)
+            pointPrecedent = null;
+        }
+    }
+
+    private void UpdateSupprimerFils()
+    {
+        if (boutonGaucheEnfonce)
+        {
+            Vector3 positionMonde = camera.ScreenToWorldPoint(Input.mousePosition);
+            positionMonde.z = 0;
+
+            (Vector2Int point1, Vector2Int point2) = grilleCircuit.GetArete(positionMonde);
+
+            if (EstAssezProcheArete(point1, point2, positionMonde, 0.1f))
             {
-                Vector3 positionMonde = camera.ScreenToWorldPoint(Input.mousePosition);
-                positionMonde.z = 0;
+                FilElectrique filElectrique = grilleCircuit.GetFil(point1, point2);
 
-                (Vector2 point1, Vector2 point2) = grilleCircuit.GetArete(positionMonde);
-
-                if (GetDistanceArete(point1, point2, positionMonde) < 0.1)
+                if (filElectrique != null)
                 {
-                    FilElectrique filElectrique = grilleCircuit.GetFil(point1, point2);
-
-                    if (filElectrique)
-                    {
-                        grilleCircuit.RetirerFil(filElectrique);
-                        Destroy(filElectrique.gameObject);
-                    }
+                    grilleCircuit.RetirerFil(filElectrique);
+                    Destroy(filElectrique.gameObject);
                 }
             }
         }
     }
 
-    private void PlacerObjet()
+    private void UpdateSupprimerElements()
     {
-        if (objetAPlacer == null)
+        if (boutonGaucheEnfonce)
         {
-            return;
-        }
+            Vector3 positionMonde = camera.ScreenToWorldPoint(Input.mousePosition);
+            positionMonde.z = 0;
 
-        ElementCircuit elementCircuit = objetAPlacer.GetComponent<ElementCircuit>();
+            (Vector2Int point1, Vector2Int point2) = grilleCircuit.GetArete(positionMonde);
 
-        if (conteneurObjets != null)
-        {
-            objetAPlacer.transform.parent = conteneurObjets.transform;
-        }
-
-        (Vector2 point1, Vector2 point2) = grilleCircuit.GetArete(objetAPlacer.transform.position);
-        Vector3 positionMondeArete = GetPositionMondeArete(point1, point2);
-        if ((objetAPlacer.transform.position - positionMondeArete).magnitude < 0.1)
-        {
-            ElementCircuit elementExistant = grilleCircuit.GetElement(objetAPlacer.transform.position);
-
-            if (elementExistant && elementExistant != elementCircuit)
+            if (EstAssezProcheArete(point1, point2, positionMonde, 0.1f))
             {
-                if (positionInitiale != null)
+                ElementCircuit elementCircuit = grilleCircuit.GetElement(point1, point2);
+                if (elementCircuit != null)
                 {
-                    elementExistant.gameObject.transform.position = (Vector3)positionInitiale;
-                    grilleCircuit.SetElement((Vector3)positionInitiale, elementExistant);
-                }
-                else
-                {
-                    grilleCircuit.RetirerElement(elementExistant);
-                    Destroy(elementExistant.gameObject);
+                    grilleCircuit.RetirerElement(elementCircuit);
+                    Destroy(elementCircuit.gameObject);
                 }
             }
-
-            grilleCircuit.SetElement(objetAPlacer.transform.position, elementCircuit);
         }
-        else
-        {
-            grilleCircuit.RetirerElement(elementCircuit);
-        }
-
-        GameObject objetPlace = objetAPlacer;
-        objetAPlacer = null;
-
-        onObjetPlace(objetPlace, modeDragEtDrop);
     }
 
     public void CommencerPlacement(GameObject objet, bool cloner)
@@ -233,6 +228,53 @@ public class SystemePlacement : MonoBehaviour
         objetAPlacer.transform.position = CalculerPositionCibleMonde();
     }
 
+    private void PlacerObjet()
+    {
+        if (objetAPlacer == null)
+        {
+            return;
+        }
+
+        ElementCircuit elementCircuit = objetAPlacer.GetComponent<ElementCircuit>();
+
+        if (conteneurObjets != null)
+        {
+            objetAPlacer.transform.parent = conteneurObjets.transform;
+        }
+
+        (Vector2Int point1, Vector2Int point2) = grilleCircuit.GetArete(objetAPlacer.transform.position);
+        Vector3 positionMondeArete = GetPositionMondeArete(point1, point2);
+        if ((objetAPlacer.transform.position - positionMondeArete).magnitude < 0.1)
+        {
+            ElementCircuit elementExistant = grilleCircuit.GetElement(objetAPlacer.transform.position);
+
+            if (elementExistant && elementExistant != elementCircuit)
+            {
+                if (positionInitiale != null)
+                {
+                    elementExistant.gameObject.transform.position = (Vector3)positionInitiale;
+                    grilleCircuit.SetElement((Vector3)positionInitiale, elementExistant);
+                }
+                else
+                {
+                    grilleCircuit.RetirerElement(elementExistant);
+                    Destroy(elementExistant.gameObject);
+                }
+            }
+
+            grilleCircuit.SetElement(objetAPlacer.transform.position, elementCircuit);
+        }
+        else
+        {
+            grilleCircuit.RetirerElement(elementCircuit);
+        }
+
+        GameObject objetPlace = objetAPlacer;
+        objetAPlacer = null;
+
+        onObjetPlace(objetPlace, modeDragEtDrop);
+    }
+
     public void ArreterPlacement()
     {
         if (objetAPlacer != null && objetAPlacer.transform.parent == transform)
@@ -257,10 +299,10 @@ public class SystemePlacement : MonoBehaviour
         Vector3 positionMonde = camera.ScreenToWorldPoint(Input.mousePosition);
         positionMonde.z = 0;
 
-        (Vector2 point1, Vector2 point2) = grilleCircuit.GetArete(positionMonde);
+        (Vector2Int point1, Vector2Int point2) = grilleCircuit.GetArete(positionMonde);
         Vector3 positionMondeArete = GetPositionMondeArete(point1, point2);
 
-        if (grilleCircuit.EstDedans(positionMonde) && GetDistanceArete(point1, point2, positionMonde) < 0.3)
+        if (EstAssezProcheArete(point1, point2, positionMonde, 0.3f))
         {
             return positionMondeArete;
         }
@@ -268,23 +310,35 @@ public class SystemePlacement : MonoBehaviour
         return positionMonde;
     }
 
-    private Vector3 GetPositionMondeArete(Vector2 point1, Vector2 point2)
+    private Vector3 GetPositionMondeArete(Vector2Int point1, Vector2Int point2)
     {
-        return grilleCircuit.GetPositionMonde((point1.x + point2.x) / 2, (point1.y + point2.y) / 2);
+        return grilleCircuit.GetPositionMonde((float)(point1.x + point2.x) / 2, (float)(point1.y + point2.y) / 2);
     }
 
-    private float GetDistanceArete(Vector2 point1, Vector2 point2, Vector3 positionMonde)
+    private bool EstAssezProcheArete(Vector2Int point1, Vector2Int point2, Vector3 positionMonde, float distanceMaximale)
     {
+        Vector3 positionGrille = grilleCircuit.GetPositionGrille(positionMonde);
         Vector3 positionMondeArete = GetPositionMondeArete(point1, point2);
+
+        float distance;
 
         if (point1.x == point2.x)
         {
-            return Math.Abs(positionMonde.x - positionMondeArete.x);
-        } else if (point1.y == point2.y)
-        {
-            return Math.Abs(positionMonde.y - positionMondeArete.y);
+            distance = Math.Abs(positionMonde.x - positionMondeArete.x);
         }
-        
-        return (positionMonde - positionMondeArete).magnitude;
+        else if (point1.y == point2.y)
+        {
+            distance = Math.Abs(positionMonde.y - positionMondeArete.y);
+        }
+        else
+        {
+            distance = (positionMonde - positionMondeArete).magnitude;
+        }
+
+        return distance <= distanceMaximale
+            && (point1.x == point2.x 
+                && positionGrille.y >= Math.Min(point1.y, point2.y) && positionGrille.y <= Math.Max(point1.y, point2.y)
+            || point1.y == point2.y 
+                && positionGrille.x >= Math.Min(point1.x, point2.x) && positionGrille.x <= Math.Max(point1.x, point2.x));
     }
 }

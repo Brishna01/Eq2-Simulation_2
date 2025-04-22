@@ -6,5 +6,6 @@ public enum Outil
 {
     TracerFils,
     DeplacerElements,
-    Supprimer
+    SupprimerFils,
+    SupprimerElements,
 }

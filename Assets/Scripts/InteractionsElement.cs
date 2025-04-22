@@ -31,10 +31,6 @@ public class InteractionsElement : MonoBehaviour
             case Outil.DeplacerElements:
                 systemePlacement.CommencerPlacement(gameObject, false, true);
                 break;
-            case Outil.Supprimer:
-                grilleCircuit.RetirerElement(elementCircuit);
-                Destroy(gameObject);
-                break;
         }
     }
 }
