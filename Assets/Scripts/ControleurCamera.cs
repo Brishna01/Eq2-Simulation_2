@@ -30,12 +30,15 @@ public class ControleurCamera : MonoBehaviour
         if (terrain != null)
         {
             grilleCircuit = terrain.GetComponent<GrilleCircuit>();
+            float largeur = (grilleCircuit.colonnes - 1) * grilleCircuit.tailleCelluleX;
+            float hauteur = (grilleCircuit.lignes - 1) * grilleCircuit.tailleCelluleY;
+
             camera.transform.position += new Vector3(
-                grilleCircuit.origineX + (grilleCircuit.colonnes - 1) / 2, 
-                grilleCircuit.origineY + (grilleCircuit.lignes - 1) / 2, 
+                grilleCircuit.origineX + largeur / 2, 
+                grilleCircuit.origineY + hauteur / 2, 
                 0
             );
-            camera.orthographicSize = 0.4f * Mathf.Sqrt(Mathf.Pow(grilleCircuit.colonnes, 2) + Mathf.Pow(grilleCircuit.lignes, 2));
+            camera.orthographicSize = 0.4f * Mathf.Sqrt(Mathf.Pow(largeur, 2) + Mathf.Pow(hauteur, 2));
         }
 
         positionSourisPrecedente = Input.mousePosition;
@@ -85,12 +88,12 @@ public class ControleurCamera : MonoBehaviour
 
             (float, float) limitesX = CalculerLimitesCamera(
                 grilleCircuit.origineX - 2, 
-                grilleCircuit.origineX + grilleCircuit.colonnes + 1,
+                grilleCircuit.origineX + grilleCircuit.colonnes * grilleCircuit.tailleCelluleX + 1,
                 tailleCameraX
             );
             (float, float) limitesY = CalculerLimitesCamera(
                 grilleCircuit.origineY - 2, 
-                grilleCircuit.origineY + grilleCircuit.lignes + 1,
+                grilleCircuit.origineY + grilleCircuit.lignes * grilleCircuit.tailleCelluleY + 1,
                 camera.orthographicSize);
 
             float nouveauX = Math.Clamp(camera.transform.position.x, limitesX.Item1, limitesX.Item2);

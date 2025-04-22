@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CodeMonkey.Utils;
 using System;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 public class GrilleCircuit : MonoBehaviour
 {
@@ -10,11 +11,10 @@ public class GrilleCircuit : MonoBehaviour
     public int colonnes { get; private set; }
     [field: SerializeField]
     public int lignes { get; private set; }
-
-    [SerializeField]
-    private float tailleCelluleX;
-    [SerializeField]
-    private float tailleCelluleY;
+    [field: SerializeField]
+    public float tailleCelluleX { get; private set; }
+    [field: SerializeField]
+    public float tailleCelluleY { get; private set; }
     [SerializeField]
     private GameObject prefabLigneGrille;
     [SerializeField]
@@ -109,30 +109,6 @@ public class GrilleCircuit : MonoBehaviour
                     }
                 }
             }
-            
-
-            for (int laColonne = 0; laColonne < colonnes; laColonne++)
-            {
-                for (int laLigne = 0; laLigne < lignes; laLigne++)
-                {
-                    // debugTextArray[(new Vector2(laColonne, laLigne), new Vector2(laColonne, laLigne + 1))] = UtilsClass.CreateWorldText(
-                    //     0.ToString(), 
-                    //     null, 
-                    //     GetPositionMonde(laColonne, laLigne) + new Vector3(tailleCelluleX, tailleCelluleY) * 0.5f, 
-                    //     5, 
-                    //     Color.white, 
-                    //     TextAnchor.MiddleCenter
-                    // );
-
-                    if (laColonne < colonnes - 1 && laLigne < lignes - 1)
-                    {
-                        Debug.DrawLine(GetPositionMondeMoitie(laColonne, laLigne), GetPositionMondeMoitie(laColonne, laLigne + 1), Color.white, 100f);
-                        Debug.DrawLine(GetPositionMondeMoitie(laColonne, laLigne), GetPositionMondeMoitie(laColonne + 1, laLigne), Color.white, 100f);
-                    }
-                }
-            }
-            Debug.DrawLine(GetPositionMondeMoitie(0, lignes - 1), GetPositionMondeMoitie(colonnes - 1, lignes - 1), Color.white, 100f);
-            Debug.DrawLine(GetPositionMondeMoitie(colonnes - 1, 0), GetPositionMondeMoitie(colonnes - 1, lignes - 1), Color.white, 100f);
         }
     }
 
@@ -273,7 +249,7 @@ public class GrilleCircuit : MonoBehaviour
 
     public Vector3 GetPositionGrille(Vector3 positionMonde)
     {
-        return new Vector3(positionMonde.x - origineX, positionMonde.y - origineY);
+        return new Vector3((positionMonde.x - origineX) / tailleCelluleX, (positionMonde.y - origineY) / tailleCelluleY);
     }
     
     public Vector3 GetPositionGrilleAlignee(Vector3 positionMonde)
@@ -281,7 +257,7 @@ public class GrilleCircuit : MonoBehaviour
         int x = Mathf.RoundToInt((positionMonde.x - origineX) / tailleCelluleX);
         int y = Mathf.RoundToInt((positionMonde.y - origineY) / tailleCelluleY);
 
-        return new Vector3(x, y, 0);
+        return new Vector3(x, y);
     }
 
     public Vector3 GetPositionMonde(float x, float y)
@@ -291,7 +267,10 @@ public class GrilleCircuit : MonoBehaviour
 
     public Vector3 GetPositionMondeAlignee(Vector3 positionMonde)
     {
-        return GetPositionGrilleAlignee(positionMonde) + new Vector3(origineX, origineY);
+        float x = Mathf.RoundToInt((positionMonde.x - origineX) / tailleCelluleX) * tailleCelluleX + origineX;
+        float y = Mathf.RoundToInt((positionMonde.y - origineY) / tailleCelluleY) * tailleCelluleY + origineY;
+
+        return new Vector3(x, y);
     }
 
     private Vector3 GetPositionMondeMoitie(int i, int j)
@@ -301,6 +280,6 @@ public class GrilleCircuit : MonoBehaviour
 
     public bool EstDedans(Vector2 point)
     {
-        return point.x >= 0 && point.x < colonnes && point.y >= 0 && point.y < lignes;
+        return point.x >= 0 && point.x < colonnes * tailleCelluleX && point.y >= 0 && point.y < lignes * tailleCelluleY;
     }
 }

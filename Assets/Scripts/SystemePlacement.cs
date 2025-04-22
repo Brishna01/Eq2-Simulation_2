@@ -176,7 +176,7 @@ public class SystemePlacement : MonoBehaviour
 
         (Vector2 point1, Vector2 point2) = grilleCircuit.GetArete(positionMonde);
         Vector3 positionMondeArete = GetPositionMondeArete(positionMonde);
-
+        
         if (grilleCircuit.EstDedans(point1) && grilleCircuit.EstDedans(point2) && (positionMonde - positionMondeArete).magnitude < 0.3)
         {
             return positionMondeArete;
@@ -188,7 +188,7 @@ public class SystemePlacement : MonoBehaviour
     private Vector3 GetPositionMondeArete(Vector3 positionMonde)
     {
         (Vector2 point1, Vector2 point2) = grilleCircuit.GetArete(positionMonde);
-
+        
         return grilleCircuit.GetPositionMonde((point1.x + point2.x) / 2, (point1.y + point2.y) / 2);
     }
 }
