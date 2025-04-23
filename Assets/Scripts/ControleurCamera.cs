@@ -4,7 +4,7 @@ using UnityEngine;
 public class ControleurCamera : MonoBehaviour
 {
     [SerializeField]
-    private GameObject terrain;
+    private GameObject circuit;
     private GrilleCircuit grilleCircuit;
 
     [SerializeField]
@@ -27,9 +27,9 @@ public class ControleurCamera : MonoBehaviour
         camera = GetComponent<Camera>();
         camera.orthographicSize = tailleInitiale;
 
-        if (terrain != null)
+        if (circuit != null)
         {
-            grilleCircuit = terrain.GetComponent<GrilleCircuit>();
+            grilleCircuit = circuit.GetComponent<GrilleCircuit>();
             float largeur = grilleCircuit.nombreCellules.x * grilleCircuit.tailleCellule.x;
             float hauteur = grilleCircuit.nombreCellules.y * grilleCircuit.tailleCellule.y;
 

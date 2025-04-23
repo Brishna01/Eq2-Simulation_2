@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 public class SystemePlacement : MonoBehaviour
 {
     [SerializeField]
-    private GameObject terrain;
+    private GameObject circuit;
     private GrilleCircuit grilleCircuit;
     [SerializeField]
     private GameObject conteneurObjets;
@@ -32,7 +32,7 @@ public class SystemePlacement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        grilleCircuit = terrain.GetComponent<GrilleCircuit>();
+        grilleCircuit = circuit.GetComponent<GrilleCircuit>();
 
         camera = GameObject.Find("Main Camera").GetComponent<Camera>();
         systemeEvenements = GameObject.Find("EventSystem").GetComponent<EventSystem>();
