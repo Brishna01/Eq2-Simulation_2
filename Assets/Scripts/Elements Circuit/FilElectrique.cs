@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class FilElectrique : ElementCircuit
 {
-    public override double puissance { get; set; }
-
     // Start is called before the first frame update
     void Start()
     {

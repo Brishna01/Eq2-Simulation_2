@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using CodeMonkey.Utils;
 using System;
-using Unity.Mathematics;
+using TMPro;
 
 public class GrilleCircuit : MonoBehaviour
 {
@@ -22,15 +21,13 @@ public class GrilleCircuit : MonoBehaviour
 
     private Dictionary<(Vector2Int, Vector2Int), ElementCircuit> matriceElements;
     private Dictionary<(Vector2Int, Vector2Int), FilElectrique> matriceFils;
-    private Dictionary<(Vector2Int, Vector2Int), int> matriceValeurs;
-    private Dictionary<(Vector2Int, Vector2Int), TextMesh> debugTextArray;
+    private Dictionary<Vector2Int, TextMeshPro> matriceTextesDebug;
 
     void Awake()
     {
         matriceElements = new Dictionary<(Vector2Int, Vector2Int), ElementCircuit>();
         matriceFils = new Dictionary<(Vector2Int, Vector2Int), FilElectrique>();
-        matriceValeurs = new Dictionary<(Vector2Int, Vector2Int), int>();
-        debugTextArray = new Dictionary<(Vector2Int, Vector2Int), TextMesh>();
+        matriceTextesDebug = new Dictionary<Vector2Int, TextMeshPro>();
 
         origine = -0.5f * (Vector2)nombreCellules * tailleCellule;
     }
@@ -56,42 +53,27 @@ public class GrilleCircuit : MonoBehaviour
             afficheurLigne.SetPositions(positions);
         }
 
-        if (modeDebug)
+        GameObject conteneurDebug = gameObject.transform.Find("Debug").gameObject;
+        for (int ligne = 0; ligne <= nombreCellules.y; ligne++)
         {
-            for (int ligne = 0; ligne < nombreCellules.y + 1; ligne++)
+            for (int colonne = 0; colonne <= nombreCellules.x; colonne++)
             {
-                for (int colonne = 0; colonne < nombreCellules.x + 1; colonne++)
-                {
-                    Vector2Int point = new Vector2Int(colonne, ligne);
-                    Vector2Int pointDroite = new Vector2Int(colonne + 1, ligne);
-                    Vector2Int pointHaut = new Vector2Int(colonne, ligne + 1);
+                GameObject objetDebug = new GameObject("TexteDebug");
+                objetDebug.transform.position = GetPositionMonde(colonne, ligne);
+                objetDebug.transform.parent = conteneurDebug.transform;
 
-                    if (colonne < nombreCellules.x)
-                    {
-                        debugTextArray[(point, pointDroite)] = UtilsClass.CreateWorldText(
-                            0.ToString(), 
-                            null, 
-                            GetPositionMonde(colonne, ligne) + new Vector3(tailleCellule.x, 0) * 0.5f, 
-                            5, 
-                            Color.white, 
-                            TextAnchor.MiddleCenter
-                        );
-                    }
-                    
-                    if (ligne < nombreCellules.y)
-                    {
-                        debugTextArray[(point, pointHaut)] = UtilsClass.CreateWorldText(
-                            0.ToString(), 
-                            null, 
-                            GetPositionMonde(colonne, ligne) + new Vector3(0, tailleCellule.y) * 0.5f, 
-                            5, 
-                            Color.white, 
-                            TextAnchor.MiddleCenter
-                        );
-                    }
-                }
+                TextMeshPro texte = objetDebug.AddComponent<TextMeshPro>();
+                texte.text = "(" + colonne + ", " + ligne + ")";
+                texte.fontSize = 20;
+                texte.alignment = TextAlignmentOptions.Center;
+                texte.sortingLayerID = SortingLayer.NameToID("Layer 3");
+
+                RectTransform rect = objetDebug.GetComponent<RectTransform>();
+                rect.localScale = new Vector3(1, 1, 1);
             }
         }
+
+        conteneurDebug.SetActive(modeDebug);
     }
 
     // Update is called once per frame
@@ -127,6 +109,26 @@ public class GrilleCircuit : MonoBehaviour
         return GetElement(point1, point2);
     }
 
+    /// <summary>
+    ///     Inspiré de : https://stackoverflow.com/a/1462128
+    /// </summary>
+    /// <returns></returns>
+    public List<ElementCircuit> GetElements()
+    {
+        List<ElementCircuit> listeElements = new List<ElementCircuit>();
+        HashSet<ElementCircuit> elementsTrouves = new HashSet<ElementCircuit>();
+
+        foreach (ElementCircuit elementCircuit in matriceElements.Values)
+        {
+            if (elementsTrouves.Add(elementCircuit))
+            {
+                listeElements.Add(elementCircuit);
+            }
+        }
+
+        return listeElements;
+    }
+
     public void SetElement(Vector2Int point1, Vector2Int point2, ElementCircuit element)
     {
         if (element != null && element.estDansGrille)
@@ -144,7 +146,6 @@ public class GrilleCircuit : MonoBehaviour
                 element.point1 = point1;
                 element.point2 = point2;
                 element.estDansGrille = true;
-                SetValeur(point1, point2, 56);
             }
         }
     }
@@ -163,7 +164,6 @@ public class GrilleCircuit : MonoBehaviour
             matriceElements.Remove((element.point1, element.point2));
             matriceElements.Remove((element.point2, element.point1));
             element.estDansGrille = false;
-            SetValeur(element.point1, element.point2, 0);
         }
     }
 
@@ -204,49 +204,6 @@ public class GrilleCircuit : MonoBehaviour
             matriceFils.Remove((fil.point2, fil.point1));
             fil.estDansGrille = false;
         }
-    }
-
-    public int GetValeur(Vector2Int point1, Vector2Int point2)
-    {
-        int valeur;
-        matriceValeurs.TryGetValue((point1, point2), out valeur);
-
-        return valeur;
-    }
-
-    public int GetValeur(Vector3 positionMonde)
-    {
-        (Vector2Int point1, Vector2Int point2) = GetArete(positionMonde);
-
-        return GetValeur(point1, point2);
-    }
-
-    public void SetValeur(Vector2Int point1, Vector2Int point2, int valeur)
-    {
-        if (EstDedans(point1) && EstDedans(point2))
-        {
-            matriceValeurs[(point1, point2)] = valeur;
-            matriceValeurs[(point2, point1)] = valeur;
-        
-            if (modeDebug)
-            {
-                if (debugTextArray.ContainsKey((point1, point2)))
-                {
-                    debugTextArray[(point1, point2)].text = valeur.ToString();
-                }
-                else if (debugTextArray.ContainsKey((point2, point1))) 
-                {
-                    debugTextArray[(point2, point1)].text = valeur.ToString();
-                }
-            }
-        }
-    }
-
-    public void SetValeur(Vector3 positionMonde, int valeur)
-    {
-        (Vector2Int point1, Vector2Int point2) = GetArete(positionMonde);
-
-        SetValeur(point1, point2, valeur);
     }
 
     public Vector2Int GetPoint(Vector3 positionMonde)
@@ -335,9 +292,19 @@ public class GrilleCircuit : MonoBehaviour
             && positionMonde.y >= origine.y && positionMonde.y < origine.y + nombreCellules.y * tailleCellule.y;
     }
 
+    public bool EstHorizontal(Vector2Int point1, Vector2Int point2)
+    {
+        return point1.y == point2.y;
+    }
+
+    public bool EstVertical(Vector2Int point1, Vector2Int point2)
+    {
+        return point1.x == point2.x;
+    }
+
     public bool SontAdjacents(Vector2Int point1, Vector2Int point2)
     {
-        return point1.x == point2.x && Math.Abs(point2.y - point1.y) <= 1
-            || point1.y == point2.y && Math.Abs(point2.x - point1.x) <= 1;
+        return EstHorizontal(point1, point2) && Math.Abs(point2.x - point1.x) <= 1
+            || EstVertical(point1, point2) && Math.Abs(point2.y - point1.y) <= 1;
     }
 }
