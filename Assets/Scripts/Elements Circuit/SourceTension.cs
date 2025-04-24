@@ -26,14 +26,14 @@ public class SourceTension : ElementCircuit
         
         if (noeud1 != 0)
         {
-            matrice[noeud1, nombreNoeuds + numeroSourceTension] = 1;
-            matrice[nombreNoeuds + numeroSourceTension, noeud1] = 1;
+            matrice[noeud1 - 1, nombreNoeuds + numeroSourceTension] = 1;
+            matrice[nombreNoeuds + numeroSourceTension, noeud1 - 1] = 1;
         }
 
         if (noeud2 != 0)
         {
-            matrice[noeud2, nombreNoeuds + numeroSourceTension] = -1;
-            matrice[nombreNoeuds + numeroSourceTension, noeud2] = -1;
+            matrice[noeud2 - 1, nombreNoeuds + numeroSourceTension] = -1;
+            matrice[nombreNoeuds + numeroSourceTension, noeud2 - 1] = -1;
         }
     }
 

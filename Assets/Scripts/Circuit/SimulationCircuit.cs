@@ -156,7 +156,7 @@ public class SimulationCircuit
         }
     }
 
-    public void Afficher()
+    public void AfficherMatrices()
     {
         if (vecteurInconnus == null)
         {
@@ -176,6 +176,27 @@ public class SimulationCircuit
         }
 
         Debug.Log(s);
+    }
+
+    public void AfficherNoeuds()
+    {
+        for (int y = 0; y <= grilleCircuit.nombreCellules.y; y++)
+        {
+            for (int x = 0; x <= grilleCircuit.nombreCellules.x; x++)
+            {
+                Vector2Int point = new Vector2Int(x, y);
+                int noeud = GetNoeud(point);
+
+                if (noeud != -1)
+                {
+                    grilleCircuit.SetTexteDebug(point, noeud.ToString());
+                }
+                else
+                {
+                    grilleCircuit.SetTexteDebug(point, "");
+                } 
+            }
+        }
     }
 
     public int GetNoeud(Vector2Int point)

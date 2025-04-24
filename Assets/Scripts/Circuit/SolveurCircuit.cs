@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class SolveurCircuit : MonoBehaviour
 {
+    [SerializeField]
+    private bool modeDebug;
+
     private GrilleCircuit grilleCircuit;
 
     // Start is called before the first frame update
@@ -28,38 +31,13 @@ public class SolveurCircuit : MonoBehaviour
         SimulationCircuit simulationCircuit = new SimulationCircuit(grilleCircuit);
         simulationCircuit.Resoudre();
         simulationCircuit.Appliquer();
-        simulationCircuit.Afficher();
+
+        if (modeDebug)
+        {
+            simulationCircuit.AfficherMatrices();
+            simulationCircuit.AfficherNoeuds();
+        }
 
         return simulationCircuit;
-    }
-
-    private void ResoudreCircuitTest()
-    {
-        Matrix<double> G = Matrix<double>.Build.Dense(4, 4);
-        Vector<double> i = Vector<double>.Build.Dense(4);
-
-        G[0, 0] = 1 / 5.0;
-        G[0, 1] = -1 / 5.0;
-        G[0, 2] = 0.0;
-        G[0, 3] = 1.0;
-        G[1, 0] = -1 / 5.0;
-        G[1, 1] = 1 / 5.0 + 1 / 10.0 + 1 / 7.0;
-        G[1, 2] = -1 / 7.0;
-        G[1, 3] = 0.0;
-        G[2, 0] = 0.0;
-        G[2, 1] = -1 / 7.0;
-        G[2, 2] = 1 / 7.0;
-        G[2, 3] = 0.0;
-        G[3, 0] = 1.0;
-        G[3, 1] = 0.0;
-        G[3, 2] = 0.0;
-        G[3, 3] = 0.0;
-
-        i[0] = 0.0;
-        i[1] = 0.0;
-        i[2] = 0.0;
-        i[3] = 1.0;
-
-        Vector<double> v = G.Solve(i);
     }
 }

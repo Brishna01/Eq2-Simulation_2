@@ -14,20 +14,18 @@ public class GrilleCircuit : MonoBehaviour
     private GameObject prefabLigneGrille;
     [SerializeField]
     private Color couleurGrille;
-    [SerializeField]
-    private bool modeDebug;
 
     public Vector2 origine { get; private set; }
 
     private Dictionary<(Vector2Int, Vector2Int), ElementCircuit> matriceElements;
     private Dictionary<(Vector2Int, Vector2Int), FilElectrique> matriceFils;
-    private Dictionary<Vector2Int, TextMeshPro> matriceTextesDebug;
+    private Dictionary<Vector2Int, TextMeshPro> textesDebug;
 
     void Awake()
     {
         matriceElements = new Dictionary<(Vector2Int, Vector2Int), ElementCircuit>();
         matriceFils = new Dictionary<(Vector2Int, Vector2Int), FilElectrique>();
-        matriceTextesDebug = new Dictionary<Vector2Int, TextMeshPro>();
+        textesDebug = new Dictionary<Vector2Int, TextMeshPro>();
 
         origine = -0.5f * (Vector2)nombreCellules * tailleCellule;
     }
@@ -63,17 +61,16 @@ public class GrilleCircuit : MonoBehaviour
                 objetDebug.transform.parent = conteneurDebug.transform;
 
                 TextMeshPro texte = objetDebug.AddComponent<TextMeshPro>();
-                texte.text = "(" + colonne + ", " + ligne + ")";
                 texte.fontSize = 20;
                 texte.alignment = TextAlignmentOptions.Center;
                 texte.sortingLayerID = SortingLayer.NameToID("Layer 3");
 
                 RectTransform rect = objetDebug.GetComponent<RectTransform>();
                 rect.localScale = new Vector3(1, 1, 1);
+
+                textesDebug[new Vector2Int(colonne, ligne)] = texte;
             }
         }
-
-        conteneurDebug.SetActive(modeDebug);
     }
 
     // Update is called once per frame
@@ -206,6 +203,14 @@ public class GrilleCircuit : MonoBehaviour
         }
     }
 
+    public void SetTexteDebug(Vector2Int point, string texte)
+    {
+        if (EstDedans(point))
+        {
+            textesDebug[point].text = texte;
+        }
+    }
+
     public Vector2Int GetPoint(Vector3 positionMonde)
     {
         Vector3 positionGrilleAlignee = GetPositionGrilleAlignee(positionMonde);
@@ -275,11 +280,6 @@ public class GrilleCircuit : MonoBehaviour
         return new Vector3(x, y);
     }
 
-    private Vector3 GetPositionMondeMoitie(int i, int j)
-    {
-        return new Vector3(i * tailleCellule.x + 0.5f + origine.x, j * tailleCellule.y + 0.5f + origine.y);
-    }
-
     public bool EstDedans(Vector2Int point)
     {
         return point.x >= 0 && point.x < nombreCellules.x + 1
@@ -306,5 +306,37 @@ public class GrilleCircuit : MonoBehaviour
     {
         return EstHorizontal(point1, point2) && Math.Abs(point2.x - point1.x) <= 1
             || EstVertical(point1, point2) && Math.Abs(point2.y - point1.y) <= 1;
+    }
+
+    public Vector3 GetPositionMondeArete(Vector2Int point1, Vector2Int point2)
+    {
+        return GetPositionMonde((float)(point1.x + point2.x) / 2, (float)(point1.y + point2.y) / 2);
+    }
+
+    public bool EstAssezProcheArete(Vector2Int point1, Vector2Int point2, Vector3 positionMonde, float distanceMaximale)
+    {
+        Vector3 positionGrille = GetPositionGrille(positionMonde);
+        Vector3 positionMondeArete = GetPositionMondeArete(point1, point2);
+
+        float distance;
+
+        if (point1.x == point2.x)
+        {
+            distance = Math.Abs(positionMonde.x - positionMondeArete.x);
+        }
+        else if (point1.y == point2.y)
+        {
+            distance = Math.Abs(positionMonde.y - positionMondeArete.y);
+        }
+        else
+        {
+            distance = (positionMonde - positionMondeArete).magnitude;
+        }
+
+        return distance <= distanceMaximale
+            && (point1.x == point2.x 
+                && positionGrille.y >= Math.Min(point1.y, point2.y) && positionGrille.y <= Math.Max(point1.y, point2.y)
+            || point1.y == point2.y 
+                && positionGrille.x >= Math.Min(point1.x, point2.x) && positionGrille.x <= Math.Max(point1.x, point2.x));
     }
 }
