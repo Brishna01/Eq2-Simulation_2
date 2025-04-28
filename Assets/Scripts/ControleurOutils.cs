@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class ControleurOutils : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class ControleurOutils : MonoBehaviour
     private SystemePlacement systemePlacement;
     private new Camera camera;
     private EventSystem systemeEvenements;
-
+   
     // Start is called before the first frame update
     void Start()
     {
@@ -74,6 +75,31 @@ public class ControleurOutils : MonoBehaviour
                 UpdateSupprimerFils();
             }
         }
+    }
+
+    public CanvasGroup OptionPanel;
+    public void BtnQ()
+    {
+        outilSelectionne = Outil.TracerFils;
+        systemePlacement.ArreterPlacement();
+    }
+
+    public void BtnW()
+    {
+        outilSelectionne = Outil.DeplacerElements;
+        systemePlacement.ArreterPlacement();
+    }
+
+    public void BtnE()
+    {
+        outilSelectionne = Outil.SupprimerFils;
+        systemePlacement.ArreterPlacement();
+    }
+
+    public void BtnR()
+    {
+        outilSelectionne = Outil.SupprimerElements;
+        systemePlacement.ArreterPlacement();
     }
 
     private void UpdateTracerFils()
