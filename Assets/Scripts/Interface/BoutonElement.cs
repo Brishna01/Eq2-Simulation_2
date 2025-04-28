@@ -2,15 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
-    private Button bouton;
     private Image imageBouton;
     private Image imageElement;
     private TextMeshProUGUI texteElement;
@@ -24,46 +21,29 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField]
     public GameObject elementCircuit;
 
-    [SerializeField]
-    private GameObject tour;
-    private System.Random rand;
-
-   
-
-    
-
-
-   
-
     // Start is called before the first frame update
     void Start()
     {
-        
-
         imageBouton = GetComponent<Image>();
         imageElement = transform.Find("Image").GetComponent<Image>();
         texteElement = transform.Find("MeshTexte").GetComponent<TextMeshProUGUI>();
         rectangle = GetComponent<RectTransform>();
         tailleInitiale = new Rect(rectangle.rect);
         couleurInitiale = imageBouton.color;
-        tour = GameObject.Find("Tower Mage");
-
-        rand = new System.Random();
 
         AfficherElement();
-
-        
-       
     }
 
     private void AfficherElement()
     {
         if (elementCircuit != null)
         {
-            SpriteRenderer afficheurSprite = elementCircuit.GetComponent<SpriteRenderer>();
+            SpriteRenderer afficheurSprite = elementCircuit.GetComponentInChildren<SpriteRenderer>();
             if (afficheurSprite != null)
             {
+                imageElement.sprite = afficheurSprite.sprite;
                 imageElement.color = afficheurSprite.color;
+                imageElement.preserveAspect = true;
                 texteElement.enabled = false;
             }
             else
@@ -84,16 +64,12 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         rectangle.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, tailleInitiale.width * 1.05f);
         rectangle.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, tailleInitiale.height * 1.05f);
-
-        
     }
 
     public void OnPointerExit(PointerEventData data)
     {
         rectangle.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, tailleInitiale.width);
         rectangle.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, tailleInitiale.height);
-
-        
     }
 
     public void OnPointerDown(PointerEventData data)
@@ -111,8 +87,4 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         imageBouton.color = couleurInitiale;
     }
-    
-   
-
-
 }
