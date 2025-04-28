@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8973868677290189501}
   - component: {fileID: 2065903294591634198}
   m_Layer: 0
-  m_Name: Tour
+  m_Name: Tour de base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
