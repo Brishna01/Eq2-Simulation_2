@@ -4,8 +4,8 @@ using UnityEngine;
 public class ControleurCamera : MonoBehaviour
 {
     [SerializeField]
-    private GameObject terrain;
-    private GridParalelle grilleCircuit;
+    private GameObject circuit;
+    private GrilleCircuit grilleCircuit;
 
     [SerializeField]
     private float tailleInitiale;
@@ -24,15 +24,24 @@ public class ControleurCamera : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (terrain != null)
+        camera = GetComponent<Camera>();
+        camera.orthographicSize = tailleInitiale;
+
+        if (circuit != null)
         {
-            grilleCircuit = terrain.GetComponent<GridParalelle>();
+            grilleCircuit = circuit.GetComponent<GrilleCircuit>();
+            float largeur = grilleCircuit.nombreCellules.x * grilleCircuit.tailleCellule.x;
+            float hauteur = grilleCircuit.nombreCellules.y * grilleCircuit.tailleCellule.y;
+
+            camera.transform.position += new Vector3(
+                grilleCircuit.origine.x + largeur / 2, 
+                grilleCircuit.origine.y + hauteur / 2, 
+                0
+            );
+            camera.orthographicSize = 0.4f * Mathf.Sqrt(Mathf.Pow(largeur, 2) + Mathf.Pow(hauteur, 2));
         }
 
         positionSourisPrecedente = Input.mousePosition;
-
-        camera = GetComponent<Camera>();
-        camera.orthographicSize = tailleInitiale;
     }
 
     // Update is called once per frame
@@ -76,10 +85,16 @@ public class ControleurCamera : MonoBehaviour
         if (grilleCircuit != null)
         {
             float tailleCameraX = camera.pixelWidth / camera.pixelHeight * camera.orthographicSize * 1.9f;
-            (float, float) limitesX = CalculerLimitesCamera(-grilleCircuit.colonnes/2 - 2, grilleCircuit.colonnes/2 + 2,
-                    tailleCameraX);
-            (float, float) limitesY = CalculerLimitesCamera(-grilleCircuit.lignes/2 - 2, grilleCircuit.lignes/2 + 2,
-                    camera.orthographicSize);
+
+            (float, float) limitesX = CalculerLimitesCamera(
+                grilleCircuit.origine.x - 2, 
+                grilleCircuit.origine.x + grilleCircuit.nombreCellules.x * grilleCircuit.tailleCellule.x + 2,
+                tailleCameraX
+            );
+            (float, float) limitesY = CalculerLimitesCamera(
+                grilleCircuit.origine.y - 2, 
+                grilleCircuit.origine.y + grilleCircuit.nombreCellules.y * grilleCircuit.tailleCellule.y + 2,
+                camera.orthographicSize);
 
             float nouveauX = Math.Clamp(camera.transform.position.x, limitesX.Item1, limitesX.Item2);
             float nouveauY = Math.Clamp(camera.transform.position.y, limitesY.Item1, limitesY.Item2);

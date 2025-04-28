@@ -1,56 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
+using MathNet.Numerics.LinearAlgebra;
 using UnityEngine;
 
 public abstract class ElementCircuit : MonoBehaviour
 {
     [field: SerializeField]
-    public virtual double tension { get; set; }
+    public double tension { get; set; }
     [field: SerializeField]
-    public virtual double resistance { get; set; }
-    public virtual double intensite { get; set; }
-    public abstract double puissance { get; set; }
+    public double resistance { get; set; }
+    public double intensite { get; set; }
+    public double puissance { get; set; }
+
+    public Vector2Int point1 { get; set; }
+    public Vector2Int point2 { get; set; }
+    public bool estDansGrille { get; set; }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
+
+    }
+
+    public virtual void ContribuerCircuit(Matrix<double> matrice, Vector<double> vecteurConnus, int noeud1, int noeud2, 
+        int nombreNoeuds, int numeroSourceTension)
+    {
         
     }
 
-    public double TrouverResistanceEQ(GameObject[,] gridArrayObjet)
-    {
-        double[] resistances = new double[gridArrayObjet.GetLength(0)];
-
-        for (int laColonne = 0; laColonne < gridArrayObjet.GetLength(0); laColonne++)
-        {
-            for (int j = 0; j < gridArrayObjet.GetLength(1); j++)
-            {
-            }
-        }
-        return 0;
-    }
-
-    public double TrouverTensionEQ()
+    public virtual void MettreAJourParametres(Vector<double> vecteurInconnus, int noeud1, int noeud2, int nombreNoeuds, 
+        int numeroSourceTension)
     {
 
-        return 0;
-    }
-
-    public double TrouverIntensiteEQ()
-    {
-
-        return 0;
-    }
-
-    public double TrouverPuissanceEQ()
-    {
-
-        return 0;
     }
 }

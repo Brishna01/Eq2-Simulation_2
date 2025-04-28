@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 2589088140191990194}
   - component: {fileID: 6369890627953077926}
-  - component: {fileID: 9082782494201750691}
-  - component: {fileID: 1571818303470630009}
-  - component: {fileID: 2088691963696259957}
-  - component: {fileID: 5877595311133010128}
+  - component: {fileID: 1226148215213617270}
+  - component: {fileID: 7491757644703613736}
+  - component: {fileID: 190473014115615884}
+  - component: {fileID: 3242675573865361801}
   m_Layer: 0
-  m_Name: Element Circuit 1
+  m_Name: Element Circuit 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,8 +31,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.71, y: 0.71, z: 1.42}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -77,18 +77,18 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8c6e04d2c5b799b418876a2bba8a7374, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 3509b9eb0db3a4a479b471828559d671, type: 3}
+  m_Color: {r: 0.2509804, g: 0.2509804, b: 0.2509804, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.14, y: 1}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &9082782494201750691
+--- !u!61 &1226148215213617270
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,8 +124,8 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.14, y: 1}
-    newSize: {x: 1.14, y: 1}
+    oldSize: {x: 2.84, y: 3.35}
+    newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -133,7 +133,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &1571818303470630009
+--- !u!114 &7491757644703613736
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7986db5176e170e4d8d1018cc0d525ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2088691963696259957
+--- !u!114 &190473014115615884
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,7 +162,7 @@ MonoBehaviour:
   puissanceText: {fileID: 0}
   tensionText: {fileID: 0}
   resistanceText: {fileID: 0}
---- !u!114 &5877595311133010128
+--- !u!114 &3242675573865361801
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

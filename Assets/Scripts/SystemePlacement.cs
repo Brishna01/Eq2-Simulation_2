@@ -1,28 +1,24 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class SystemePlacement : MonoBehaviour
 {
     [SerializeField]
-    private GameObject terrain;
-    private Grid grille;
-    private GridParalelle grilleCircuit;
-    private GameObject grillage;
-    [SerializeField]
-    private bool grillagePersistant;
-
+    private GameObject circuit;
+    private GrilleCircuit grilleCircuit;
     [SerializeField]
     private GameObject conteneurObjets;
 
-    [SerializeField]
-    private Vector2 decalageCurseur;
-
     private GameObject objetAPlacer;
+    private Vector3? positionInitiale;
     private bool modeDragEtDrop;
+    public bool estActif { get => objetAPlacer != null; }
 
+    public Action<GameObject, bool> onPlacementCommence;
     public Action<GameObject, bool> onObjetPlace;
     public Action<GameObject, bool> onPlacementArrete;
 
@@ -32,18 +28,10 @@ public class SystemePlacement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        grille = terrain.GetComponent<Grid>();
-        grilleCircuit = terrain.GetComponent<GridParalelle>();
-        grillage = terrain.transform.Find("Grillage").gameObject;
+        grilleCircuit = circuit.GetComponent<GrilleCircuit>();
 
         camera = GameObject.Find("Main Camera").GetComponent<Camera>();
         systemeEvenements = GameObject.Find("EventSystem").GetComponent<EventSystem>();
-
-        if (grillage != null)
-        {
-            grillage.transform.localScale = new Vector3(grilleCircuit.colonnes - 0.9f, grilleCircuit.lignes - 0.9f, 0);
-            grillage.SetActive(grillagePersistant);
-        }
     }
 
     // Update is called once per frame
@@ -52,48 +40,23 @@ public class SystemePlacement : MonoBehaviour
         if (objetAPlacer != null)
         {
             objetAPlacer.transform.position = CalculerPositionCibleMonde();
-        }
 
-        if (modeDragEtDrop && Input.GetMouseButtonUp(0))
-        {
-            if (!systemeEvenements.IsPointerOverGameObject())
+            if (modeDragEtDrop && Input.GetMouseButtonUp(0))
             {
-                PlacerObject();
+                if (!systemeEvenements.IsPointerOverGameObject())
+                {
+                    PlacerObjet();
+                }
+                else
+                {
+                    ArreterPlacement();
+                }
             }
-            else
+            else if (!modeDragEtDrop && Input.GetMouseButtonDown(0) && !systemeEvenements.IsPointerOverGameObject())
             {
-                ArreterPlacement();
+                PlacerObjet();
             }
         }
-        else if (!modeDragEtDrop && Input.GetMouseButtonDown(0) && !systemeEvenements.IsPointerOverGameObject())
-        {
-            PlacerObject();
-        }
-    }
-
-    private void PlacerObject()
-    {
-        if (objetAPlacer == null)
-        {
-            return;
-        }
-
-        SpriteRenderer afficheurSprite = objetAPlacer.GetComponent<SpriteRenderer>();
-        if (afficheurSprite != null)
-        {
-            Color couleur = afficheurSprite.color;
-            afficheurSprite.color = new Color(couleur.r, couleur.g, couleur.b);
-        }
-
-        if (conteneurObjets != null)
-        {
-            objetAPlacer.transform.parent = conteneurObjets.transform;
-        }
-
-        GameObject objetPlace = objetAPlacer;
-        objetAPlacer = null;
-
-        onObjetPlace(objetPlace, modeDragEtDrop);
     }
 
     public void CommencerPlacement(GameObject objet, bool cloner)
@@ -115,24 +78,69 @@ public class SystemePlacement : MonoBehaviour
         {
             objetAPlacer = Instantiate(objet, transform);
             objetAPlacer.name = objet.name;
+            positionInitiale = null;
         }
         else
         {
             objetAPlacer = objet;
+            positionInitiale = objet.transform.position;
         }
 
         objetAPlacer.transform.position = CalculerPositionCibleMonde();
 
-        SpriteRenderer afficheurSprite = objetAPlacer.GetComponent<SpriteRenderer>();
-        if (afficheurSprite != null)
+        if (onPlacementCommence != null)
         {
-            Color couleur = afficheurSprite.color;
-            afficheurSprite.color = new Color(couleur.r, couleur.g, couleur.b, 0.8f);
+            onPlacementCommence(objetAPlacer, modeDragEtDrop);  
+        }
+    }
+
+    private void PlacerObjet()
+    {
+        if (objetAPlacer == null)
+        {
+            return;
         }
 
-        if (grillage != null)
+        ElementCircuit elementCircuit = objetAPlacer.GetComponent<ElementCircuit>();
+
+        if (conteneurObjets != null)
         {
-            grillage.SetActive(true);
+            objetAPlacer.transform.parent = conteneurObjets.transform;
+        }
+
+        (Vector2Int point1, Vector2Int point2) = grilleCircuit.GetArete(objetAPlacer.transform.position);
+        Vector3 positionMondeArete = grilleCircuit.GetPositionMondeArete(point1, point2);
+        if ((objetAPlacer.transform.position - positionMondeArete).magnitude < 0.1)
+        {
+            ElementCircuit elementExistant = grilleCircuit.GetElement(objetAPlacer.transform.position);
+
+            if (elementExistant && elementExistant != elementCircuit)
+            {
+                if (positionInitiale != null)
+                {
+                    elementExistant.gameObject.transform.position = (Vector3)positionInitiale;
+                    grilleCircuit.SetElement((Vector3)positionInitiale, elementExistant);
+                }
+                else
+                {
+                    grilleCircuit.RetirerElement(elementExistant);
+                    Destroy(elementExistant.gameObject);
+                }
+            }
+
+            grilleCircuit.SetElement(objetAPlacer.transform.position, elementCircuit);
+        }
+        else
+        {
+            grilleCircuit.RetirerElement(elementCircuit);
+        }
+
+        GameObject objetPlace = objetAPlacer;
+        objetAPlacer = null;
+
+        if (onObjetPlace != null)
+        {
+            onObjetPlace(objetPlace, modeDragEtDrop);
         }
     }
 
@@ -141,13 +149,14 @@ public class SystemePlacement : MonoBehaviour
         if (objetAPlacer != null && objetAPlacer.transform.parent == transform)
         {
             Destroy(objetAPlacer);
-            onPlacementArrete(objetAPlacer, modeDragEtDrop);
-            objetAPlacer = null;
-        }
 
-        if (grillage != null && !grillagePersistant)
-        {
-            grillage.SetActive(false);
+            if (onPlacementArrete != null)
+            {
+                onPlacementArrete(objetAPlacer, modeDragEtDrop);
+            }
+            
+            objetAPlacer = null;
+            positionInitiale = null;
         }
     }
 
@@ -161,18 +170,17 @@ public class SystemePlacement : MonoBehaviour
 
     private Vector3 CalculerPositionCibleMonde()
     {
-        Vector3 positionEcran = Input.mousePosition + new Vector3(decalageCurseur.x, decalageCurseur.y, 0);
-        Vector3 positionMonde = camera.ScreenToWorldPoint(positionEcran);
+        Vector3 positionMonde = camera.ScreenToWorldPoint(Input.mousePosition);
+        positionMonde.z = 0;
 
-        if (grille != null)
+        (Vector2Int point1, Vector2Int point2) = grilleCircuit.GetArete(positionMonde);
+        Vector3 positionMondeArete = grilleCircuit.GetPositionMondeArete(point1, point2);
+
+        if (grilleCircuit.EstAssezProcheArete(point1, point2, positionMonde, 0.3f))
         {
-            positionMonde = grille.WorldToCell(positionMonde + new Vector3(0.5f, 0.5f, 0));
+            return positionMondeArete;
         }
 
-        return new Vector3(
-            Math.Clamp(positionMonde.x, -grilleCircuit.colonnes / 2, grilleCircuit.colonnes / 2), 
-            Math.Clamp(positionMonde.y, -grilleCircuit.lignes / 2, grilleCircuit.lignes / 2), 
-            0
-        );
+        return positionMonde;
     }
 }

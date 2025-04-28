@@ -75,10 +75,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -105541197
+  m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6,
+  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7,
     type: 3}
   m_Color: {r: 1, g: 0.8627451, b: 0.39215687, a: 1}
   m_FlipX: 0
@@ -147,6 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86f3d3e4fb9a5a64ba9041cac95c5cae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <tension>k__BackingField: 0
   <resistance>k__BackingField: 10
 --- !u!114 &7491757644703613736
 MonoBehaviour:
@@ -160,6 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7986db5176e170e4d8d1018cc0d525ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deplacable: 0
 --- !u!114 &-5193246284991930235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,6 +177,8 @@ MonoBehaviour:
   infoElementText: {fileID: 0}
   courantText: {fileID: 0}
   puissanceText: {fileID: 0}
+  tensionText: {fileID: 0}
+  resistanceText: {fileID: 0}
 --- !u!114 &4845823775727261229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,4 +191,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86f3d3e4fb9a5a64ba9041cac95c5cae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <tension>k__BackingField: 0
   <resistance>k__BackingField: 0
