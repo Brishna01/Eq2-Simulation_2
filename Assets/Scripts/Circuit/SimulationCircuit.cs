@@ -8,6 +8,7 @@ using System;
 /// Utilise la méthode d'analyse nodale modifiée.
 /// 
 /// Basé sur : https://spicesharp.github.io/SpiceSharp/articles/custom_components/modified_nodal_analysis.html
+/// et https://lpsa.swarthmore.edu/Systems/Electrical/mna/MNA3.html
 /// </summary>
 public class SimulationCircuit
 {
@@ -25,6 +26,10 @@ public class SimulationCircuit
         this.grilleCircuit = grilleCircuit;
     }
 
+    /// <summary>
+    /// Résoud le circuit à l'aide de l'analyse nodale modifiée.
+    /// </summary>
+    /// <returns>le vecteur d'inconnus</returns>
     public Vector<double> Resoudre()
     {
         if (vecteurInconnus != null)
@@ -59,6 +64,13 @@ public class SimulationCircuit
         return vecteurInconnus;
     }
 
+    /// <summary>
+    /// Identifie tous les noeuds du circuit en associant les points à un noeud.
+    /// Pour chaque borne d'un élément de circuit, un numéro de noeud est généré
+    /// et est propagé sur les fils électriques jusqu'à ce qu'une autre borne
+    /// soit trouvée.
+    /// </summary>
+    /// <param name="elementsCircuit">la liste d'éléments du circuit</param>
     private void IdentifierNoeuds(List<ElementCircuit> elementsCircuit)
     {
         dictionnaireNoeuds.Clear();
@@ -132,6 +144,10 @@ public class SimulationCircuit
             && grilleCircuit.GetElement(point, prochainPoint) == null;
     }
 
+    /// <summary>
+    /// Applique le résultat de l'analyse nodale modifiée sur les éléments du
+    /// circuit.
+    /// </summary>
     public void Appliquer()
     {
         if (vecteurInconnus == null)
@@ -156,6 +172,9 @@ public class SimulationCircuit
         }
     }
 
+    /// <summary>
+    /// Affiche la matrice et les vecteurs du système d'équations sur la console.
+    /// </summary>
     public void AfficherMatrices()
     {
         if (vecteurInconnus == null)
@@ -178,6 +197,10 @@ public class SimulationCircuit
         Debug.Log(s);
     }
 
+    /// <summary>
+    /// Affiche les numéros de noeud sur les fils du circuit en utilisant les
+    /// textes de débogage.
+    /// </summary>
     public void AfficherNoeuds()
     {
         for (int y = 0; y <= grilleCircuit.nombreCellules.y; y++)
@@ -189,16 +212,21 @@ public class SimulationCircuit
 
                 if (noeud != -1)
                 {
-                    grilleCircuit.SetTexteDebug(point, noeud.ToString());
+                    grilleCircuit.SetTexteDébogage(point, noeud.ToString());
                 }
                 else
                 {
-                    grilleCircuit.SetTexteDebug(point, "");
+                    grilleCircuit.SetTexteDébogage(point, "");
                 } 
             }
         }
     }
 
+    /// <summary>
+    /// Retourne le numéro du noeud au point donné ou -1.
+    /// </summary>
+    /// <param name="point">le point sur la grille</param>
+    /// <returns>le numéro du noeud</returns>
     public int GetNoeud(Vector2Int point)
     {
         int noeud = -1;
@@ -211,6 +239,11 @@ public class SimulationCircuit
         return noeud;
     }
 
+    /// <summary>
+    /// Retourne le nombre de sources de tension dans le circuit.
+    /// </summary>
+    /// <param name="elementsCircuit">la liste d'éléments de circuit</param>
+    /// <returns>le nombre de sources de tension</returns>
     private int GetNombreSourcesTension(List<ElementCircuit> elementsCircuit)
     {
         int nombreSourcesTension = 0;
