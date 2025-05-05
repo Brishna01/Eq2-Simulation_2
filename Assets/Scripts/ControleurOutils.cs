@@ -36,23 +36,19 @@ public class ControleurOutils : MonoBehaviour
     {
          if (Input.GetKeyDown(KeyCode.Q))
         {
-            outilSelectionne = Outil.TracerFils;
-            systemePlacement.ArreterPlacement();
+            SelectionTracerFils();
         }
         else if (Input.GetKeyDown(KeyCode.W))
         {
-            outilSelectionne = Outil.DeplacerElements;
-            systemePlacement.ArreterPlacement();
+            SelectionDeplacerElements();
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
-            outilSelectionne = Outil.SupprimerFils;
-            systemePlacement.ArreterPlacement();
+            SelectionSUpprimerFils();
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
-            outilSelectionne = Outil.SupprimerElements;
-            systemePlacement.ArreterPlacement();
+            SelectionSupprimerElements();
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -77,26 +73,45 @@ public class ControleurOutils : MonoBehaviour
         }
     }
 
-    public CanvasGroup OptionPanel;
     public void BtnQ()
+    {
+        SelectionTracerFils();
+    }
+
+    public void BtnW()
+    {
+        SelectionDeplacerElements();
+    }
+
+    public void BtnE()
+    {
+        SelectionSUpprimerFils();
+    }
+
+    public void BtnR()
+    {
+        SelectionSupprimerElements();
+    }
+
+    private void SelectionTracerFils()
     {
         outilSelectionne = Outil.TracerFils;
         systemePlacement.ArreterPlacement();
     }
-
-    public void BtnW()
+        
+    private void SelectionDeplacerElements()
     {
         outilSelectionne = Outil.DeplacerElements;
         systemePlacement.ArreterPlacement();
     }
 
-    public void BtnE()
+    private void SelectionSUpprimerFils()
     {
         outilSelectionne = Outil.SupprimerFils;
         systemePlacement.ArreterPlacement();
     }
 
-    public void BtnR()
+    private void SelectionSupprimerElements()
     {
         outilSelectionne = Outil.SupprimerElements;
         systemePlacement.ArreterPlacement();
