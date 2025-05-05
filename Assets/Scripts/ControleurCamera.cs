@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Contrôle le mouvement de la caméra.
+/// </summary>
 public class ControleurCamera : MonoBehaviour
 {
     [SerializeField]
@@ -54,6 +57,10 @@ public class ControleurCamera : MonoBehaviour
             tailleMaximale);
     }
 
+    /// <summary>
+    /// Fait déplacer la caméra selon le mouvement de la souris lorsque le 
+    /// bouton droit est enfoncé.
+    /// </summary>
     private void GererDeplacement()
     {
         if (peutDeplacer) 
@@ -80,10 +87,14 @@ public class ControleurCamera : MonoBehaviour
         positionSourisPrecedente = Input.mousePosition;
     }
 
+    /// <summary>
+    /// Garde la caméra dedans une certaine région centrée sur la grille.
+    /// </summary>
     private void ContraindreCamera()
     {
         if (grilleCircuit != null)
         {
+            // 1.9f est un nombre arbitraire obtenu par essai-erreur qui fonctionne
             float tailleCameraX = camera.pixelWidth / camera.pixelHeight * camera.orthographicSize * 1.9f;
 
             (float, float) limitesX = CalculerLimitesCamera(
@@ -106,7 +117,7 @@ public class ControleurCamera : MonoBehaviour
     /// <summary>
     /// Retourne les nouvelles limites d'une composante de la position de la 
     /// caméra de sorte qu'aucune position hors-limites ne soit visible sur 
-    /// l'écran.
+    /// l'écran. Si ce n'est pas possible, le milieu est retourné.
     /// </summary>
     /// <param name="min">le minimum de la composante</param>
     /// <param name="max">le maximum de la composante</param>

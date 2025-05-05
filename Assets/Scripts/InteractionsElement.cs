@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
+/// <summary>
+/// Implémente les intéractions avec l'élément pour certains outils.
+/// </summary>
 public class InteractionsElement : MonoBehaviour
 {
     private ElementCircuit elementCircuit;
