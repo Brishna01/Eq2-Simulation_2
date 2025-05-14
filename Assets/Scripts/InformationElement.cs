@@ -15,6 +15,7 @@ public class InformationElement : MonoBehaviour
     public TextMeshProUGUI resistanceText; // UI pour afficher la resistance
 
     private ElementCircuit elementCircuit;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -40,19 +41,23 @@ public class InformationElement : MonoBehaviour
     {
         
     }
+
     public void OnMouseEnter()
     {
         infoElementText.text = gameObject.name ;
         infoElementText.enabled = true; // S'assurer que le texte est visible
-        courantText.text = "Courant : " +elementCircuit.intensite.ToString();
+
+        // Afficher deux décimales : https://stackoverflow.com/a/164932
+        courantText.text = "Courant : " + elementCircuit.intensite.ToString("0.##") + " A";
         courantText.enabled = true;
-        puissanceText.text = "Puissance : " + elementCircuit.puissance.ToString();
+        puissanceText.text = "Puissance : " + elementCircuit.puissance.ToString("0.##") + " W";
         puissanceText.enabled = true;
-        tensionText.text = "Tension : " + elementCircuit.tension.ToString();
+        tensionText.text = "Tension : " + elementCircuit.tension.ToString("0.##") + " V";
         tensionText.enabled = true;
-        resistanceText.text = "Resistance : " + elementCircuit.resistance.ToString();
+        resistanceText.text = "Resistance : " + elementCircuit.resistance.ToString("0.##") + " Ω";
         resistanceText.enabled = true;
     }
+
     public void OnMouseExit()
     {
         infoElementText.enabled = false;

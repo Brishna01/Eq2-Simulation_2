@@ -38,18 +38,26 @@ public class SimulationCircuit
         }
 
         List<ElementCircuit> elementsCircuit = grilleCircuit.GetElements();
-        int nombreSourcesTension = GetNombreSourcesTension(elementsCircuit);
+        // Utile pour connaître la taille des matrices
+        int nombreSourcesTension = GetNombreSourcesTension(elementsCircuit); 
 
         IdentifierNoeuds(elementsCircuit);
         
+        // Créer les matrices
         matrice = Matrix<double>.Build.Dense(nombreNoeuds + nombreSourcesTension, nombreNoeuds + nombreSourcesTension);
         vecteurConnus = Vector<double>.Build.Dense(nombreNoeuds + nombreSourcesTension);
 
+        // Permettre chaque élément de modifier les matrices
         int numeroSourceTension = 0;
         foreach (ElementCircuit elementCircuit in elementsCircuit)
         {
-            int noeud1 = dictionnaireNoeuds[elementCircuit.point1];
-            int noeud2 = dictionnaireNoeuds[elementCircuit.point2];
+            int noeud1 = GetNoeud(elementCircuit.point1);
+            int noeud2 = GetNoeud(elementCircuit.point2);
+
+            if (noeud1 == -1 || noeud2 == -1)
+            {
+                continue;
+            }
 
             elementCircuit.ContribuerCircuit(matrice, vecteurConnus, noeud1, noeud2, nombreNoeuds, numeroSourceTension);
 
@@ -59,6 +67,7 @@ public class SimulationCircuit
             }
         }
 
+        // Résoudre le système d'équations
         vecteurInconnus = matrice.Solve(vecteurConnus);
 
         return vecteurInconnus;
@@ -78,13 +87,13 @@ public class SimulationCircuit
         int numeroNoeud = 0;
         foreach (ElementCircuit elementCircuit in elementsCircuit)
         {
-            if (!dictionnaireNoeuds.ContainsKey(elementCircuit.point1))
+            if (!dictionnaireNoeuds.ContainsKey(elementCircuit.point1) && EstValidePourNoeud(elementCircuit.point1))
             {
                 PropagerNoeud(elementCircuit.point1, elementCircuit.point1 - elementCircuit.point2, numeroNoeud);
                 numeroNoeud++;
             }
             
-            if (!dictionnaireNoeuds.ContainsKey(elementCircuit.point2))
+            if (!dictionnaireNoeuds.ContainsKey(elementCircuit.point2) && EstValidePourNoeud(elementCircuit.point2))
             {
                 PropagerNoeud(elementCircuit.point2, elementCircuit.point2 - elementCircuit.point1, numeroNoeud);
                 numeroNoeud++;
@@ -104,6 +113,7 @@ public class SimulationCircuit
            
             if (direction.x != 0)
             {
+                // La direction est présentement horizontale, on essaie de propager verticalement
                 if (PeutPropagerNoeudVers(point, new Vector2Int(0, -1)))
                 {
                     PropagerNoeud(point + new Vector2Int(0, -1), new Vector2Int(0, -1), numeroNoeud);
@@ -116,6 +126,7 @@ public class SimulationCircuit
             }
             else
             {
+                // La direction est présentement verticale, on essaie de propager horizontalement
                 if (PeutPropagerNoeudVers(point, new Vector2Int(-1, 0)))
                 {
                     PropagerNoeud(point + new Vector2Int(-1, 0), new Vector2Int(-1, 0), numeroNoeud);
@@ -136,12 +147,33 @@ public class SimulationCircuit
         }
     }
 
+    /// <summary>
+    /// Retourne si on peut propager un noeud dans la direction donnée. On peut
+    /// s'il y a un fil et pas d'élément.
+    /// </summary>
+    /// <param name="point">le point de départ</param>
+    /// <param name="direction">la direction</param>
+    /// <returns>si on peut propager dans la direction</returns>
     private bool PeutPropagerNoeudVers(Vector2Int point, Vector2Int direction)
     {
         Vector2Int prochainPoint = point + direction;
 
         return grilleCircuit.GetFil(point, prochainPoint) != null 
             && grilleCircuit.GetElement(point, prochainPoint) == null;
+    }
+
+    /// <summary>
+    /// Retourne si le point peut faire partie d'un noeud. C'est le cas s'il y
+    /// a un fil libre dans au moins une direction.
+    /// </summary>
+    /// <param name="point">le point à vérifier</param>
+    /// <returns>si le point est valide</returns>
+    private bool EstValidePourNoeud(Vector2Int point)
+    {
+        return PeutPropagerNoeudVers(point, new Vector2Int(0, -1))
+            || PeutPropagerNoeudVers(point, new Vector2Int(0, 1))
+            || PeutPropagerNoeudVers(point, new Vector2Int(-1, 0))
+            || PeutPropagerNoeudVers(point, new Vector2Int(1, 0));
     }
 
     /// <summary>
@@ -160,8 +192,13 @@ public class SimulationCircuit
         int numeroSourceTension = 0;
         foreach (ElementCircuit elementCircuit in elementsCircuit)
         {
-            int noeud1 = dictionnaireNoeuds[elementCircuit.point1];
-            int noeud2 = dictionnaireNoeuds[elementCircuit.point2];
+            int noeud1 = GetNoeud(elementCircuit.point1);
+            int noeud2 = GetNoeud(elementCircuit.point2);
+
+            if (noeud1 == -1 || noeud2 == -1)
+            {
+                continue;
+            }
 
             elementCircuit.MettreAJourParametres(vecteurInconnus, noeud1, noeud2, nombreNoeuds, numeroSourceTension);
 
@@ -212,11 +249,11 @@ public class SimulationCircuit
 
                 if (noeud != -1)
                 {
-                    grilleCircuit.SetTexteDébogage(point, noeud.ToString());
+                    grilleCircuit.SetTexteDebogage(point, noeud.ToString());
                 }
                 else
                 {
-                    grilleCircuit.SetTexteDébogage(point, "");
+                    grilleCircuit.SetTexteDebogage(point, "");
                 } 
             }
         }

@@ -26,15 +26,15 @@ public class GrilleCircuit : MonoBehaviour
 
     public Vector2 origine { get; private set; }
 
-    private Dictionary<(Vector2Int, Vector2Int), ElementCircuit> matriceElements;
-    private Dictionary<(Vector2Int, Vector2Int), FilElectrique> matriceFils;
-    private Dictionary<Vector2Int, TextMeshPro> textesDebug;
+    private Dictionary<(Vector2Int, Vector2Int), ElementCircuit> matriceElements; // Sert de matrice d'adjacence
+    private Dictionary<(Vector2Int, Vector2Int), FilElectrique> matriceFils; // Sert de matrice d'adjacence
+    private Dictionary<Vector2Int, TextMeshPro> textesDebogage;
 
     void Awake()
     {
         matriceElements = new Dictionary<(Vector2Int, Vector2Int), ElementCircuit>();
         matriceFils = new Dictionary<(Vector2Int, Vector2Int), FilElectrique>();
-        textesDebug = new Dictionary<Vector2Int, TextMeshPro>();
+        textesDebogage = new Dictionary<Vector2Int, TextMeshPro>();
 
         origine = -0.5f * (Vector2)nombreCellules * tailleCellule;
     }
@@ -77,7 +77,7 @@ public class GrilleCircuit : MonoBehaviour
                 RectTransform rect = objetDebug.GetComponent<RectTransform>();
                 rect.localScale = new Vector3(1, 1, 1);
 
-                textesDebug[new Vector2Int(colonne, ligne)] = texte;
+                textesDebogage[new Vector2Int(colonne, ligne)] = texte;
             }
         }
     }
@@ -267,12 +267,30 @@ public class GrilleCircuit : MonoBehaviour
     /// </summary>
     /// <param name="point">le point</param>
     /// <param name="texte">le nouveau texte</param>
-    public void SetTexteDébogage(Vector2Int point, string texte)
+    public void SetTexteDebogage(Vector2Int point, string texte)
     {
         if (EstDedans(point))
         {
-            textesDebug[point].text = texte;
+            textesDebogage[point].text = texte;
         }
+    }
+
+    /// <summary>
+    /// Retourne si les textes de débogage sont visibles ou non.
+    /// </summary>
+    /// <returns>si c'est visible</returns>
+    public bool GetDebogageVisible()
+    {
+        return gameObject.transform.Find("Debug").gameObject.activeSelf;
+    }
+
+    /// <summary>
+    /// Rend visible ou non les textes de débogage.
+    /// </summary>
+    /// <param name="visible">si c'est visible</param>
+    public void SetDebogageVisible(bool visible)
+    {
+        gameObject.transform.Find("Debug").gameObject.SetActive(visible);
     }
 
     /// <summary>

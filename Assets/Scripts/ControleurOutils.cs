@@ -60,6 +60,10 @@ public class ControleurOutils : MonoBehaviour
             outilSelectionne = Outil.SupprimerElements;
             systemePlacement.ArreterPlacement();
         }
+        else if (Input.GetKeyDown(KeyCode.D))
+        {
+            grilleCircuit.SetDebogageVisible(!grilleCircuit.GetDebogageVisible());
+        }
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -104,7 +108,6 @@ public class ControleurOutils : MonoBehaviour
                 {
                     // Il s'agit du premier point
                     pointPrecedent = point;
-                    Debug.Log(point);
                 }
                 else if (pointPrecedent != null && point != pointPrecedent
                     && grilleCircuit.SontAdjacents(point, (Vector2Int)pointPrecedent))
