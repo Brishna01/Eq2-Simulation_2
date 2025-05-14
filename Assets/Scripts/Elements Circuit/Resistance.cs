@@ -50,4 +50,9 @@ public class Resistance : ElementCircuit
         intensite = tension / resistance;
         puissance = resistance * Math.Pow(intensite, 2);
     }
+
+    public override string GetTexteValeur()
+    {
+        return resistance.ToString("0.##") + " Ω";
+    }
 }

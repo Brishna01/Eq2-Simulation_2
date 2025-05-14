@@ -61,4 +61,13 @@ public abstract class ElementCircuit : MonoBehaviour
     {
 
     }
+
+    /// <summary>
+    /// Retourne le texte de la valeur la plus pertinente.
+    /// </summary>
+    /// <returns>le texte de la valeur</returns>
+    public virtual string GetTexteValeur()
+    {
+        return "";
+    }
 }

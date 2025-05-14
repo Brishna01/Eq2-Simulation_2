@@ -43,4 +43,9 @@ public class SourceTension : ElementCircuit
         intensite = Math.Abs(vecteurInconnus[nombreNoeuds + numeroSourceTension]);
         puissance = tension * intensite;
     }
+
+    public override string GetTexteValeur()
+    {
+        return tension.ToString("0.##") + " V";
+    }
 }

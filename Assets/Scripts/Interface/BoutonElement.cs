@@ -11,6 +11,7 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private Image imageBouton;
     private Image imageElement;
     private TextMeshProUGUI texteElement;
+    private TextMeshProUGUI texteValeur;
     private RectTransform rectangle;
     private Rect tailleInitiale;
     private Color couleurInitiale;
@@ -26,7 +27,8 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         imageBouton = GetComponent<Image>();
         imageElement = transform.Find("Image").GetComponent<Image>();
-        texteElement = transform.Find("MeshTexte").GetComponent<TextMeshProUGUI>();
+        texteElement = transform.Find("Texte").GetComponent<TextMeshProUGUI>();
+        texteValeur = transform.Find("Valeur").GetComponent<TextMeshProUGUI>();
         rectangle = GetComponent<RectTransform>();
         tailleInitiale = new Rect(rectangle.rect);
         couleurInitiale = imageBouton.color;
@@ -44,13 +46,19 @@ public class BoutonElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 imageElement.sprite = afficheurSprite.sprite;
                 imageElement.color = afficheurSprite.color;
                 imageElement.preserveAspect = true;
-                texteElement.enabled = false;
+                imageElement.gameObject.SetActive(true);
+                texteElement.gameObject.SetActive(false);
             }
             else
             {
                 texteElement.text = elementCircuit.name;
-                imageElement.enabled = false;
+                texteElement.gameObject.SetActive(true);
+                imageElement.gameObject.SetActive(false);
             }
+
+
+            texteValeur.text = elementCircuit.GetComponent<ElementCircuit>().GetTexteValeur();
+            texteValeur.gameObject.SetActive(true);
         }
     }
 
