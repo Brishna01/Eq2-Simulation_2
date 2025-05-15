@@ -1141,6 +1141,7 @@ RectTransform:
   - {fileID: 841276223}
   - {fileID: 1046426647}
   - {fileID: 118829040}
+  - {fileID: 1063885795}
   - {fileID: 439396032}
   m_Father: {fileID: 279491688}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1530,7 +1531,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1063885795}
   - {fileID: 749050873}
   m_Father: {fileID: 312618331}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1556,7 +1556,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 336
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 7
   m_Spacing: -121.3
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
@@ -1834,7 +1834,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 2.2799683, y: -221.71004}
+  m_AnchoredPosition: {x: 2.2800293, y: -221.71002}
   m_SizeDelta: {x: 7.0998535, y: -424.59}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!111 &644945482
@@ -3223,11 +3223,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 439396032}
+  m_Father: {fileID: 312618331}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 946, y: -446.64996}
   m_SizeDelta: {x: 1265, y: 485.22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1063885796
@@ -3264,11 +3264,10 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "But du jeu :\n\nConstruire des circuits sur la grille en utilisant les
-    4 commandes suivantes:\n\nQ = Tracer des fils\nW = D\xE9placer des \xE9l\xE9ments\nE=
-    Supprimer les fils\nR=  Supprimer les \xE9l\xE9ments\n\nApr\xE8s avoir construit
-    le circuit, appuyer sur \xABespace\xBB pour obtenir les valeurs des porpri\xE9t\xE9s
-    du circuit (intensit\xE9, puissance, tension)\n\nDans le circuit, chaque noeud
-    est identifi\xE9"
+    4 commandes suivantes:\n\nQ = Tracer des fils\nW = D\xE9placer des tours\nE=
+    Supprimer les fils\nR=  Supprimer les tours\n\nApr\xE8s avoir construit le circuit,
+    placer la souris sur un \xE9l\xE9ment pour voir les valeurs des porpri\xE9t\xE9s
+    du circuit (intensit\xE9, puissance, tension)"
 --- !u!222 &1063885797
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4012,7 +4011,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 5.830017, y: -433.91}
+  m_AnchoredPosition: {x: 5.830078, y: -433.91003}
   m_SizeDelta: {x: 0, y: -0.18671}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1899662534
