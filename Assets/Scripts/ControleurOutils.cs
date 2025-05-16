@@ -40,29 +40,21 @@ public class ControleurOutils : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-         if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            outilSelectionne = Outil.TracerFils;
-            systemePlacement.ArreterPlacement();
+            SelectionTracerFils();
         }
         else if (Input.GetKeyDown(KeyCode.W))
         {
-            outilSelectionne = Outil.DeplacerElements;
-            systemePlacement.ArreterPlacement();
+            SelectionDeplacerElements();
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
-            outilSelectionne = Outil.SupprimerFils;
-            systemePlacement.ArreterPlacement();
+            SelectionSUpprimerFils();
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
-            outilSelectionne = Outil.SupprimerElements;
-            systemePlacement.ArreterPlacement();
-        }
-        else if (Input.GetKeyDown(KeyCode.D))
-        {
-            grilleCircuit.SetDebogageVisible(!grilleCircuit.GetDebogageVisible());
+            SelectionSupprimerElements();
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -85,6 +77,50 @@ public class ControleurOutils : MonoBehaviour
                 UpdateSupprimerFils();
             }
         }
+    }
+
+    public void BtnQ()
+    {
+        SelectionTracerFils();
+    }
+
+    public void BtnW()
+    {
+        SelectionDeplacerElements();
+    }
+
+    public void BtnE()
+    {
+        SelectionSUpprimerFils();
+    }
+
+    public void BtnR()
+    {
+        SelectionSupprimerElements();
+    }
+
+    private void SelectionTracerFils()
+    {
+        outilSelectionne = Outil.TracerFils;
+        systemePlacement.ArreterPlacement();
+    }
+
+    private void SelectionDeplacerElements()
+    {
+        outilSelectionne = Outil.DeplacerElements;
+        systemePlacement.ArreterPlacement();
+    }
+
+    private void SelectionSUpprimerFils()
+    {
+        outilSelectionne = Outil.SupprimerFils;
+        systemePlacement.ArreterPlacement();
+    }
+
+    private void SelectionSupprimerElements()
+    {
+        outilSelectionne = Outil.SupprimerElements;
+        systemePlacement.ArreterPlacement();
     }
 
     /// <summary>
