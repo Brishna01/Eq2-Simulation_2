@@ -56,6 +56,10 @@ public class ControleurOutils : MonoBehaviour
         {
             SelectionSupprimerElements();
         }
+        else if (Input.GetKeyDown(KeyCode.D))
+        {
+            grilleCircuit.SetDebogageVisible(!grilleCircuit.GetDebogageVisible());
+        }
 
         if (Input.GetMouseButtonDown(0))
         {

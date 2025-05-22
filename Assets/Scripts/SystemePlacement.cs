@@ -223,8 +223,9 @@ public class SystemePlacement : MonoBehaviour
     private Vector3 CalculerPositionCibleMonde()
     {
         Vector3 positionMonde = camera.ScreenToWorldPoint(Input.mousePosition);
+        positionMonde.z = 0;
         (Vector2Int point1, Vector2Int point2) = grilleCircuit.GetArete(positionMonde);
-
+        
         if (grilleCircuit.EstAssezProcheArete(point1, point2, positionMonde, DISTANCE_DETECTION_ARETE))
         {
             return grilleCircuit.GetPositionMondeArete(point1, point2);

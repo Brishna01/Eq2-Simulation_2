@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using TMPro;
+using Unity.VisualScripting;
 
 /// <summary>
 /// Représente la grille sur laquelle le circuit est créé. Cette classe permet
@@ -29,6 +30,8 @@ public class GrilleCircuit : MonoBehaviour
     private Dictionary<(Vector2Int, Vector2Int), ElementCircuit> matriceElements; // Sert de matrice d'adjacence
     private Dictionary<(Vector2Int, Vector2Int), FilElectrique> matriceFils; // Sert de matrice d'adjacence
     private Dictionary<Vector2Int, TextMeshPro> textesDebogage;
+
+    public Action onModifie;
 
     void Awake()
     {
@@ -177,6 +180,8 @@ public class GrilleCircuit : MonoBehaviour
                 element.point2 = point2;
                 element.estDansGrille = true;
             }
+
+            onModifie();
         }
     }
 
@@ -204,6 +209,8 @@ public class GrilleCircuit : MonoBehaviour
             matriceElements.Remove((element.point1, element.point2));
             matriceElements.Remove((element.point2, element.point1));
             element.estDansGrille = false;
+
+            onModifie();
         }
     }
 
@@ -245,6 +252,8 @@ public class GrilleCircuit : MonoBehaviour
                 fil.point2 = point2;
                 fil.estDansGrille = true;
             }
+
+            onModifie();
         }
     }
 
@@ -259,6 +268,8 @@ public class GrilleCircuit : MonoBehaviour
             matriceFils.Remove((fil.point1, fil.point2));
             matriceFils.Remove((fil.point2, fil.point1));
             fil.estDansGrille = false;
+
+            onModifie();
         }
     }
 
@@ -323,7 +334,7 @@ public class GrilleCircuit : MonoBehaviour
         if (Math.Abs(positionMonde.x - positionMondeAlignee.x) > Math.Abs(positionMonde.y - positionMondeAlignee.y))
         {
             // La souris est à gauche ou à droite du point
-            if (positionMonde.x > positionMondeAlignee.x && point1.x < nombreCellules.x + 1 || point1.x == 0)
+            if (positionMonde.x > positionMondeAlignee.x && point1.x < nombreCellules.x || point1.x == 0)
             {
                 point2 = new Vector2Int(point1.x + 1, point1.y);
             }
@@ -335,7 +346,7 @@ public class GrilleCircuit : MonoBehaviour
         else
         {
             // La souris est en haut ou en bas du point
-            if (positionMonde.y > positionMondeAlignee.y && point1.y < nombreCellules.y + 1 || point1.y == 0)
+            if (positionMonde.y > positionMondeAlignee.y && point1.y < nombreCellules.y || point1.y == 0)
             {
                 point2 = new Vector2Int(point1.x, point1.y + 1);
             }

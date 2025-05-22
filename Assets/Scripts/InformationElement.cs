@@ -6,34 +6,34 @@ using UnityEngine;
 public class InformationElement : MonoBehaviour
 {
 
-    public TextMeshProUGUI infoElementText;// UI pour afficher la puissance et le courant 
+    public TextMeshProUGUI texteElement;// UI pour afficher le nom de l'élément
 
-    public TextMeshProUGUI courantText;   // UI pour afficher le courant
-    public TextMeshProUGUI puissanceText; // UI pour afficher la puissance
+    public TextMeshProUGUI texteCourant;   // UI pour afficher le courant
+    public TextMeshProUGUI textePuissance; // UI pour afficher la puissance
 
-    public TextMeshProUGUI tensionText;   // UI pour afficher la tension
-    public TextMeshProUGUI resistanceText; // UI pour afficher la resistance
+    public TextMeshProUGUI texteTension;   // UI pour afficher la tension
+    public TextMeshProUGUI texteResistance; // UI pour afficher la resistance
 
     private ElementCircuit elementCircuit;
     
     // Start is called before the first frame update
     void Start()
     {
-        infoElementText = GameObject.Find("InfoElementText").GetComponent<TextMeshProUGUI>();
+        texteElement = GameObject.Find("TexteElement").GetComponent<TextMeshProUGUI>();
 
-        courantText = GameObject.Find("TextCourant").GetComponent<TextMeshProUGUI>();
-        puissanceText = GameObject.Find("TextPuissance").GetComponent<TextMeshProUGUI>();
+        texteCourant = GameObject.Find("TexteCourant").GetComponent<TextMeshProUGUI>();
+        textePuissance = GameObject.Find("TextePuissance").GetComponent<TextMeshProUGUI>();
 
-        tensionText = GameObject.Find("TextTension").GetComponent<TextMeshProUGUI>();
-        resistanceText = GameObject.Find("TextResistance").GetComponent <TextMeshProUGUI>();
+        texteTension = GameObject.Find("TexteTension").GetComponent<TextMeshProUGUI>();
+        texteResistance = GameObject.Find("TexteResistance").GetComponent <TextMeshProUGUI>();
 
         elementCircuit = GetComponent<ElementCircuit>();
 
-        infoElementText.enabled = false;
-        courantText.enabled = false;
-        puissanceText.enabled = false;
-        tensionText.enabled = false;
-        resistanceText.enabled = false;
+        texteElement.enabled = false;
+        texteCourant.enabled = false;
+        textePuissance.enabled = false;
+        texteTension.enabled = false;
+        texteResistance.enabled = false;
     }
 
     // Update is called once per frame
@@ -44,26 +44,26 @@ public class InformationElement : MonoBehaviour
 
     public void OnMouseEnter()
     {
-        infoElementText.text = gameObject.name ;
-        infoElementText.enabled = true; // S'assurer que le texte est visible
+        texteElement.text = gameObject.name ;
+        texteElement.enabled = true; // S'assurer que le texte est visible
 
         // Afficher deux décimales : https://stackoverflow.com/a/164932
-        courantText.text = "Courant : " + elementCircuit.intensite.ToString("0.##") + " A";
-        courantText.enabled = true;
-        puissanceText.text = "Puissance : " + elementCircuit.puissance.ToString("0.##") + " W";
-        puissanceText.enabled = true;
-        tensionText.text = "Tension : " + elementCircuit.tension.ToString("0.##") + " V";
-        tensionText.enabled = true;
-        resistanceText.text = "Resistance : " + elementCircuit.resistance.ToString("0.##") + " Ω";
-        resistanceText.enabled = true;
+        texteCourant.text = "Courant : " + elementCircuit.intensite.ToString("0.##") + " A";
+        texteCourant.enabled = true;
+        textePuissance.text = "Puissance : " + elementCircuit.puissance.ToString("0.##") + " W";
+        textePuissance.enabled = true;
+        texteTension.text = "Tension : " + elementCircuit.tension.ToString("0.##") + " V";
+        texteTension.enabled = true;
+        texteResistance.text = "Resistance : " + elementCircuit.resistance.ToString("0.##") + " Ω";
+        texteResistance.enabled = true;
     }
 
     public void OnMouseExit()
     {
-        infoElementText.enabled = false;
-        courantText.enabled = false;
-        puissanceText.enabled = false;
-        tensionText.enabled = false;
-        resistanceText.enabled = false;
+        texteElement.enabled = false;
+        texteCourant.enabled = false;
+        textePuissance.enabled = false;
+        texteTension.enabled = false;
+        texteResistance.enabled = false;
     }
 }

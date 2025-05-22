@@ -7,15 +7,15 @@ using UnityEngine;
 /// </summary>
 public class SolveurCircuit : MonoBehaviour
 {
-    [SerializeField]
-    private bool modeDebug;
-
     private GrilleCircuit grilleCircuit;
+    private SimulationCircuit simulationCircuit;
 
     // Start is called before the first frame update
     void Start()
     {
         grilleCircuit = GetComponent<GrilleCircuit>();
+
+        grilleCircuit.onModifie += () => simulationCircuit = ResoudreCircuit();
     }
 
     // Update is called once per frame
@@ -23,7 +23,11 @@ public class SolveurCircuit : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            ResoudreCircuit();
+            if (simulationCircuit != null)
+            {
+                simulationCircuit.AfficherMatrices();
+                simulationCircuit.AfficherNoeuds();
+            }
         }
     }
 
@@ -36,12 +40,6 @@ public class SolveurCircuit : MonoBehaviour
         SimulationCircuit simulationCircuit = new SimulationCircuit(grilleCircuit);
         simulationCircuit.Resoudre();
         simulationCircuit.Appliquer();
-
-        if (modeDebug)
-        {
-            simulationCircuit.AfficherMatrices();
-            simulationCircuit.AfficherNoeuds();
-        }
 
         return simulationCircuit;
     }
